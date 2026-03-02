@@ -2,7 +2,6 @@ package dao;
 
 import bdd.DS;
 import dto.CollectionPoint;
-import dto.WasteType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -45,9 +44,9 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
     public CollectionPoint update(CollectionPoint collectionPoint) {
         try (Connection con = bdd.getConnection()){
             PreparedStatement ps = con.prepareStatement("UPDATE collectionpoint SET adress = ?, capacitemax = ?  WHERE id = ?");
-            ps.setInt(3, collectionPoint.id());
-            ps.setString(1, collectionPoint.adresse());
-            ps.setInt(2, collectionPoint.capaciteMax());
+            ps.setInt(3, collectionPoint.getId());
+            ps.setString(1, collectionPoint.getAdresse());
+            ps.setInt(2, collectionPoint.getCapaciteMax());
             ps.executeUpdate();
         } catch (SQLException e) {
             return null;

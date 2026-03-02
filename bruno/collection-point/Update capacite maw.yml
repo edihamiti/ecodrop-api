@@ -1,0 +1,27 @@
+info:
+  name: Update capacite maw
+  type: http
+  seq: 2
+
+http:
+  method: PATCH
+  url: http://localhost:8080/ecodrop/points/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "adresse": "{{$randomStreetAddress}}",
+        "capaciteMax": "{{$randomInt}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
