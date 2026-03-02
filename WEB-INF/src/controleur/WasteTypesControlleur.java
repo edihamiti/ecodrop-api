@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.SerializationUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,32 +21,25 @@ public class WasteTypesControlleur extends HttpServlet {
     private static WasteTypeDAO wasteTypesDAO = new JDBCWasteTypeDAO();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        XmlMapper xmlMapper = new XmlMapper();
-
-        String accept = req.getHeader("Accept");
-        if (accept == null) accept = "application/json";
-        resp.setContentType(accept);
-
         String info = req.getPathInfo();
-
         // Cas "/"
         if (info == null || info.equals("/")) {
             Collection<WasteType> l = wasteTypesDAO.findAll();
-            if (l.isEmpty()) {
-                resp.sendError(HttpServletResponse.SC_NO_CONTENT);}
-            if (accept.equals("application/json")) {
-                out.println(objectMapper.writeValueAsString(l));
-            } else if (accept.equals("application/xml")) {
-                out.println(xmlMapper.writeValueAsString(l));
+            if (l == null) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
             }
+            if (l.isEmpty()) {
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                return;
+            }
+            SerializationUtils.sendResponse(resp, req, l, HttpServletResponse.SC_OK);
             return;
         }
 
         String[] splits = info.split("/");
 
-        if (splits.length != 2) {
+        if (splits.length != 2 || splits[1].isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
@@ -65,11 +59,7 @@ public class WasteTypesControlleur extends HttpServlet {
             return;
         }
 
-        if (accept.equals("application/json")) {
-            out.println(objectMapper.writeValueAsString(wasteType));
-        } else if (accept.equals("application/xml")) {
-            out.println(xmlMapper.writeValueAsString(wasteType));
-        }
+        SerializationUtils.sendResponse(resp, req, wasteType, HttpServletResponse.SC_OK);
     }
 
     @Override
