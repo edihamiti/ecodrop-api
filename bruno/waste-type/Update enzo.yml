@@ -1,0 +1,23 @@
+info:
+  name: Update enzo
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/waste-types/5
+  body:
+    type: json
+    data: |-
+      {
+        "id":3,
+        "nom":"enzo",
+        "pointsPerKilo":135
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

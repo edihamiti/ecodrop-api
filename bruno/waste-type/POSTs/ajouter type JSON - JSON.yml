@@ -1,19 +1,19 @@
 info:
-  name: ajouter type déchets
+  name: ajouter type JSON > JSON
   type: http
-  seq: 3
+  seq: 1
 
 http:
   method: POST
   url: http://localhost:8080/ecodrop/waste-types
   headers:
     - name: Accept
-      value: application/xml
+      value: application/json
   body:
     type: json
     data: |-
       {
-        "id": 3,
+        "id": 3, // L'ID sera ignoré
         "nom":"enzo",
         "pointsPerKilo":1
       }

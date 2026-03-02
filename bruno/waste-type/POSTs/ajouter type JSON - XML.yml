@@ -1,0 +1,26 @@
+info:
+  name: ajouter type JSON > XML
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/ecodrop/waste-types
+  headers:
+    - name: Accept
+      value: application/xml
+  body:
+    type: json
+    data: |-
+      {
+        "id": 3, // L'ID sera ignoré
+        "nom":"enzo",
+        "pointsPerKilo":1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
