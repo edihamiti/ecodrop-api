@@ -1,18 +1,18 @@
 info:
-  name: Update enzo
+  name: Update pointsPerKilo
   type: http
   seq: 3
 
 http:
   method: PUT
-  url: http://localhost:8080/ecodrop/waste-types/5
+  url: http://localhost:8080/ecodrop/waste-types/13
   body:
     type: json
     data: |-
       {
-        "id":3,
+        "id":13,
         "nom":"enzo",
-        "pointsPerKilo":135
+        "pointsPerKilo":200
       }
   auth: inherit
 
