@@ -68,6 +68,10 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
             ps.setInt(3, wasteType.id());
             int affected = ps.executeUpdate();
             if (affected == 0) return null;
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return new WasteType(rs.getInt(1), rs.getString(2), rs.getInt(3));
+            }
             return wasteType;
         } catch (SQLException e) {
             return null;
