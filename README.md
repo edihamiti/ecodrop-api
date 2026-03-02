@@ -4,7 +4,7 @@ Ce document fournit la documentation de l'API REST pour le projet Ecodrop.
 
 ## URL de Base
 
-L'API est servie à partir de la racine de l'application web. Tous les points de terminaison sont relatifs au chemin de déploiement de l'application.
+L'API est servie à partir de la racine de l'application web. Tous les endpoints sont relatifs au chemin de déploiement de l'application.
 
 Exemple : `http://localhost:8080/ecodrop/`
 
@@ -20,7 +20,7 @@ Pour les requêtes `POST`, `PUT` et `PATCH`, l'en-tête `Content-Type` doit êtr
 
 ## Types de Déchets (Waste Types)
 
-Le point de terminaison `/waste-types` est utilisé pour gérer les types de déchets.
+L'endpoint `/waste-types` est utilisé pour gérer les types de déchets.
 
 ### Modèle de Données : `WasteType`
 
@@ -158,7 +158,7 @@ Le point de terminaison `/waste-types` est utilisé pour gérer les types de dé
 
 ## Points de Collecte (Collection Points)
 
-Le point de terminaison `/points` est utilisé pour gérer les points de collecte.
+L'endpoint `/points` est utilisé pour gérer les points de collecte.
 
 ### Modèle de Données : `CollectionPoint`
 
