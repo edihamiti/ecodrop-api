@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import utils.MergeUtils;
+import utils.PathUtils;
 import utils.SerializationUtils;
 
 import java.io.IOException;
@@ -34,18 +35,10 @@ public class CollectionPointControlleur extends PatchServlet {
             return;
         }
 
-        String[] splits = info.split("/");
-
-        if (splits.length != 2 || splits[1].isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        String idString = splits[1];
-        int id;
+        Integer id;
         try {
-            id = Integer.parseInt(idString);
-        } catch (NumberFormatException e) {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
@@ -67,18 +60,10 @@ public class CollectionPointControlleur extends PatchServlet {
             return;
         }
 
-        String[] splits = info.split("/");
-
-        if (splits.length != 2 || splits[1].isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        String idString = splits[1];
-        int id;
+        Integer id;
         try {
-            id = Integer.parseInt(idString);
-        } catch (NumberFormatException e) {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
