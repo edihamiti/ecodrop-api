@@ -22,4 +22,18 @@ public interface WasteTypeDAO {
      * @return true si la modification s'est bien déroulée, false sinon
      */
     public WasteType update(WasteType wasteType);
+
+    /**
+     * Supprime un WasteType
+     * @param id l
+     * @return true si la suppression s'est bien déroulée, false sinon
+     */
+    public boolean delete(int id);
+
+    /**
+     * Supprime un WasteType
+     * @param wasteType
+     * @return true si la suppression s'est bien déroulée, false sinon
+     */
+    public boolean delete(WasteType wasteType);
 }

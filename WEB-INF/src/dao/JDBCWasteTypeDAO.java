@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCWasteTypeDAO implements WasteTypeDAO {
-    private static DS bdd = new DS();
+    private static final DS bdd = new DS();
 
     @Override
     public WasteType findById(int id) {
@@ -76,5 +76,22 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM wastetype WHERE id = ?");
+            ps.setInt(1, id);
+            int affected = ps.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(WasteType wasteType) {
+        return delete(wasteType.id());
     }
 }
