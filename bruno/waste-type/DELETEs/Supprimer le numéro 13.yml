@@ -1,10 +1,10 @@
 info:
-  name: check avant PUT
+  name: Supprimer le numéro 13
   type: http
-  seq: 1
+  seq: 3
 
 http:
-  method: GET
+  method: DELETE
   url: http://localhost:8080/ecodrop/waste-types/13
   auth: inherit
 

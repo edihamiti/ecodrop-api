@@ -1,7 +1,7 @@
 info:
-  name: check avant PUT
+  name: check après DELETE
   type: http
-  seq: 1
+  seq: 4
 
 http:
   method: GET
