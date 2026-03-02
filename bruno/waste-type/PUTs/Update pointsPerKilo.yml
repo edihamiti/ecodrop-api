@@ -11,8 +11,8 @@ http:
     data: |-
       {
         "id":13,
-        "nom":"enzo",
-        "pointsPerKilo":200
+        "nom":"{{$randomFirstName}}",
+        "pointsPerKilo":{{$randomInt}}
       }
   auth: inherit
 
