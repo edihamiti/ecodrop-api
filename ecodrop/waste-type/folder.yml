@@ -1,0 +1,7 @@
+info:
+  name: waste-type
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
