@@ -22,8 +22,8 @@ public class SerializationUtils {
     /**
      * Configure la réponse et convertit l'objet en String selon le header Accept
      */
-    public static void sendResponse(HttpServletResponse resp, Object data, int status) throws IOException {
-        String accept = resp.getHeader("Accept"); // On peut aussi le repasser en paramètre
+    public static void sendResponse(HttpServletResponse resp, HttpServletRequest req, Object data, int status) throws IOException {
+        String accept = req.getHeader("Accept"); // On peut aussi le repasser en paramètre
         if (accept == null || accept.equals("*/*")) accept = "application/json";
 
         resp.setContentType(accept);
