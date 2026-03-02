@@ -13,7 +13,7 @@ http:
     type: json
     data: |-
       {
-        "id":2,
+        "id": 3,
         "nom":"enzo",
         "pointsPerKilo":1
       }

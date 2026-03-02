@@ -1,4 +1,4 @@
 package dto;
 
-public record WasteType(int id, String nom, int pointsPerKilo) {
+public record WasteType(Integer id, String nom, int pointsPerKilo) {
 }

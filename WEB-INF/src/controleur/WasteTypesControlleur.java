@@ -11,13 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.List;
 
 @WebServlet("/waste-types/*")
 public class WasteTypesControlleur extends HttpServlet {
@@ -105,11 +101,11 @@ public class WasteTypesControlleur extends HttpServlet {
 
         if (wasteType == null) resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 
-        boolean success = wasteTypesDAO.save(wasteType);
+        WasteType created = wasteTypesDAO.save(wasteType);
 
-        if (success) {
+        if (created != null) {
             resp.setStatus(HttpServletResponse.SC_CREATED);
-            out.println(objectMapper.writeValueAsString(wasteType));
+            out.println(objectMapper.writeValueAsString(created));
             return;
         }
         resp.sendError(409);

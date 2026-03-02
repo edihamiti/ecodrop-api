@@ -3,10 +3,7 @@ package dao;
 import bdd.DS;
 import dto.WasteType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +41,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
     }
 
     @Override
-    public boolean save(WasteType wasteType) {
+    public WasteType save(WasteType wasteType) {
         try (Connection con = bdd.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO wastetype VALUES (?, ?, ?)");
             ps.setInt(1, wasteType.id());
@@ -52,6 +49,21 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
             ps.setInt(3, wasteType.pointsPerKilo());
             ps.executeUpdate();
             return true;
+            PreparedStatement ps = con.prepareStatement("INSERT INTO wastetype(nom, pointsPerKilo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, wasteType.nom());
+            ps.setInt(2, wasteType.pointsPerKilo());
+            int affected = ps.executeUpdate();
+            if (affected == 0) return null;
+            ResultSet keys = ps.getGeneratedKeys();
+            if (keys.next()) {
+                int generatedId = keys.getInt(1);
+                return new WasteType(generatedId, wasteType.nom(), wasteType.pointsPerKilo());
+            }
+            return null;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
         } catch (SQLException e) {
             return false;
         }
