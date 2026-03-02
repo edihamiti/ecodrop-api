@@ -64,40 +64,18 @@ public class WasteTypesControlleur extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-
-        String accept = req.getHeader("Accept");
-        if (accept == null) accept = "application/json";
-        resp.setContentType(accept);
-
-        String contentType = req.getContentType();
-        if (contentType == null) contentType = "application/json";
-
-        WasteType wasteType = null;
-        ObjectMapper objectMapper = new ObjectMapper();
-        if (contentType.equals("application/xml")) {
-            objectMapper = new XmlMapper();
-            wasteType = objectMapper.readValue(req.getInputStream(), WasteType.class);
-        } else if (contentType.equals("application/json")) {
-            objectMapper = new ObjectMapper();
-            wasteType = objectMapper.readValue(req.getReader(), WasteType.class);
-        }
-
-        if (accept.equals("application/json")) {
-            objectMapper = new ObjectMapper();
-        } else if (accept.equals("application/xml")) {
-            objectMapper = new XmlMapper();
-        }
-
-        if (wasteType == null) resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-
-        WasteType created = wasteTypesDAO.save(wasteType);
-
-        if (created != null) {
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-            out.println(objectMapper.writeValueAsString(created));
+        WasteType wasteType = SerializationUtils.parseRequest(req, WasteType.class);
+        if (wasteType == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        resp.sendError(409);
+
+        WasteType saved = wasteTypesDAO.save(wasteType);
+        if (saved == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
+        SerializationUtils.sendResponse(resp, req, saved, HttpServletResponse.SC_CREATED);
     }
 }
