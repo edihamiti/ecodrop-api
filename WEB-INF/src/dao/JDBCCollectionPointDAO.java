@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.CollectionPoint;
 import dto.CollectionPointStatus;
 import dto.CollectionPointWithWasteTypes;
@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCCollectionPointDAO implements CollectionPointDAO {
-    private static DS bdd = new DS();
-    public static final int DEFAULT_LIMIT = 20;
-    public static final int DEFAULT_OFFSET = 0;
+    private static Database bdd = new Database();
 
     @Override
     public CollectionPoint findById(int id) {

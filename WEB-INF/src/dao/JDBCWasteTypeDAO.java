@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.WasteType;
 
 import java.sql.*;
@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCWasteTypeDAO implements WasteTypeDAO {
-    public static final int DEFAULT_LIMIT = 20;
-    public static final int DEFAULT_OFFSET = 0;
-    public JDBCWasteTypeDAO() {}
-    private static final DS bdd = new DS();
+    private static final Database bdd = new Database();
 
     @Override
     public WasteType findById(int id) {
