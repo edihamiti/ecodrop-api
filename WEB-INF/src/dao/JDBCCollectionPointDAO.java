@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.CollectionPoint;
 
 import java.sql.*;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCCollectionPointDAO implements CollectionPointDAO{
-    private static DS bdd = new DS();
+    private static Database bdd = new Database();
 
     @Override
     public CollectionPoint findById(int id) {

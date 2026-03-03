@@ -3,24 +3,32 @@ package utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 
 public class TokenUtils {
 
-    /**
-     * Extrait le token brut de la chaîne du Header Authorization
-     * @param authHeader Le contenu du header "Authorization"
-     * @return Le token string ou null s'il est mal formé
-     */
+    private static final String SECRET = Config.get("secret");
+    private static final String PREFIX = "Bearer ";
+
     public static String extractToken(String authHeader) {
+        if (authHeader != null && authHeader.startsWith(PREFIX)) {
+            return authHeader.substring(PREFIX.length()).trim();
+        }
         return null;
     }
 
-    /**
-     * Décode le JWT et vérifie sa signature
-     * @param token Le token extrait
-     * @return Les claims (données) ou null si invalide/expiré
-     */
     public static Claims decodeJWT(String token) {
+        if (token == null) return null;
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
+
+            return Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token) // On vérifie la signature
+                    .getPayload();            // On récupère les données
+        } catch (Exception e) {
             return null;
+        }
     }
 }
