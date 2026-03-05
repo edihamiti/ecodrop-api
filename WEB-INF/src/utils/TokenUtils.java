@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class TokenUtils {
 
-    private static final String SECRET = null;
+    private static final String SECRET = Config.get("api.client_secret");
     private static final String PREFIX = "Bearer ";
     private static final long EXPIRATION_TIME = 3600;
 
