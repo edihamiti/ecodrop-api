@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class TokenUtils {
 
     private static final String SECRET = null;
     private static final String PREFIX = "Bearer ";
+    private static final long EXPIRATION_TIME = 3600;
 
     public static String extractToken(String authHeader) {
         if (authHeader != null && authHeader.startsWith(PREFIX)) {
@@ -124,6 +126,36 @@ public class TokenUtils {
         } else {
             return null;
         }
+    }
+
+    public static String createAppTokenFromProvider(String externalToken, String provider) throws Exception {
+        // 1. VÉRIFICATION : On demande au provider si le token est vrai et on récupère les infos
+        // (Cette méthode utilise l'appel UserInfo ou TokenInfo qu'on a vu avant)
+        JsonNode userInfo = verifyTokenWithProvider(externalToken, provider);
+
+        if (userInfo == null) {
+            throw new RuntimeException("Le token fourni par " + provider + " est invalide.");
+        }
+
+        // 2. EXTRACTION DES INFOS
+        String email = userInfo.has("email") ? userInfo.get("email").asText() : userInfo.get("sub").asText();
+
+        // On récupère les scopes (souvent renvoyés par Google dans le champ "scope")
+        // S'ils ne sont pas là, on met une valeur par défaut
+        String scopes = userInfo.has("scope") ? userInfo.get("scope").asText() : "openid profile email";
+
+        // 3. CRÉATION DU JWT ECO-DROP
+        SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .subject(email) // L'identité de l'utilisateur
+                .claim("provider", provider) // D'où il vient
+                .claim("external_scopes", scopes) // Les permissions qu'il a chez Google/Discord
+                .claim("role", "USER") // Ton rôle interne par défaut
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(key)
+                .compact();
     }
 
 }
