@@ -45,7 +45,7 @@ public class TokenUtils {
         Map<String, String> params = Map.of(
                 "grant_type", "authorization_code",
                 "code", code,
-                "redirect_uri", Config.get("redirect_uri")+"?from="+provider,
+                "redirect_uri", Config.get("redirect_uri") + "?from=" + provider,
                 "client_id", Config.get(provider + ".client_id"),
                 "client_secret", Config.get(provider + ".client_secret")
         );
@@ -76,10 +76,15 @@ public class TokenUtils {
             JsonNode rootNode = mapper.readTree(response.body());
 
             // On récupère le champ "access_token"
-            JsonNode accessTokenNode = rootNode.get("access_token");
+            String accessTokenNode = rootNode.get("access_token").asText();
 
             if (accessTokenNode != null) {
-                return accessTokenNode.asText();
+                if (verifyTokenWithProvider(accessTokenNode, provider) != null) {
+                    return accessTokenNode;
+                } else {
+                    System.err.println("Tentative de connexion avec un faux token (" + provider + ")");
+                    return null;
+                }
             } else {
                 System.err.println("Le champ access_token est absent de la réponse : " + response.body());
                 return null;
@@ -89,4 +94,36 @@ public class TokenUtils {
             return null;
         }
     }
+
+    public static JsonNode verifyTokenWithProvider(String token, String provider) throws Exception {
+        // 1. On choisit l'URL de vérification selon le provider
+        String verifyUrl = switch (provider) {
+            case "google" -> "https://oauth2.googleapis.com/tokeninfo?id_token=" + token;
+            case "discord" -> "https://discord.com/api/users/@me";
+            case "gitlab" -> "https://gitlab.univ-lille.fr/api/v4/user";
+            default -> throw new IllegalArgumentException("Provider inconnu");
+        };
+
+        java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+        java.net.http.HttpRequest.Builder requestBuilder = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(verifyUrl));
+
+        // Pour Discord et GitLab, le token se passe dans le Header
+        if (!provider.equals("google")) {
+            requestBuilder.header("Authorization", "Bearer " + token);
+        }
+
+        java.net.http.HttpResponse<String> response = client.send(
+                requestBuilder.GET().build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString()
+        );
+
+        // 2. Si le statut est 200, le token est AUTHENTIQUE et VALIDE
+        if (response.statusCode() == 200) {
+            return new ObjectMapper().readTree(response.body());
+        } else {
+            return null;
+        }
+    }
+
 }
