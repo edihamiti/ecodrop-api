@@ -5,7 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import utils.TokenUtils;
+import utils.JwtUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,8 +41,8 @@ public class SecurityFilter implements Filter {
 
         // --- Logique de sécurité pour tout le reste ---
         String authHeader = req.getHeader("Authorization");
-        String token = TokenUtils.extractToken(authHeader);
-        Claims claims = TokenUtils.decodeJWT(token);
+        String token = JwtUtils.extractToken(authHeader);
+        Claims claims = JwtUtils.decodeJWT(token);
         if (claims == null) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalide ou absent");
             return;
