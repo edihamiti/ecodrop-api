@@ -25,7 +25,18 @@ public class WasteTypesControlleur extends HttpServlet {
 
             // Cas "/"
             if (id == null) {
-                Collection<WasteType> l = wasteTypesDAO.findAll();
+                int limit = utils.ParamUtils.getLimit(req);
+                int offset = utils.ParamUtils.getOffset(req);
+                Collection<WasteType> l;
+
+                if (limit > 0 && offset >= 0) {
+                    l = wasteTypesDAO.findAll(limit, offset);
+                } else if (limit > 0) {
+                    l = wasteTypesDAO.findAll(limit);
+                } else {
+                    l = wasteTypesDAO.findAll();
+                }
+
                 if (l == null) {
                     resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     return;
