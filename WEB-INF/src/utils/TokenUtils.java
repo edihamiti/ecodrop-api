@@ -65,8 +65,6 @@ public class TokenUtils {
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
-        System.out.println(request);
-
         java.net.http.HttpResponse<String> response = client.send(request,
                 java.net.http.HttpResponse.BodyHandlers.ofString());
 
@@ -81,10 +79,9 @@ public class TokenUtils {
             String accessTokenNode = rootNode.get("access_token").asText();
 
             if (accessTokenNode != null) {
-                if (verifyTokenWithProvider(accessTokenNode, provider) != null) {
-                    return accessTokenNode;
-                } else {
-                    System.err.println("Tentative de connexion avec un faux token (" + provider + ")");
+                try{
+                    return createAppTokenFromProvider(accessTokenNode, provider);
+                }catch (Exception e){
                     return null;
                 }
             } else {
@@ -98,29 +95,34 @@ public class TokenUtils {
     }
 
     public static JsonNode verifyTokenWithProvider(String token, String provider) throws Exception {
-        // 1. On choisit l'URL de vérification selon le provider
-        String verifyUrl = switch (provider) {
-            case "google" -> "https://oauth2.googleapis.com/tokeninfo?id_token=" + token;
+        if (token == null || token.isEmpty()) {
+            throw new Exception("Token null ou vide pour " + provider);
+        }
+
+        // 1. URLs UserInfo (Le standard pour récupérer l'identité)
+        String url = switch (provider.toLowerCase()) {
+            case "google" -> "https://www.googleapis.com/oauth2/v3/userinfo";
             case "discord" -> "https://discord.com/api/users/@me";
             case "gitlab" -> "https://gitlab.univ-lille.fr/api/v4/user";
-            default -> throw new IllegalArgumentException("Provider inconnu");
+            default -> throw new IllegalArgumentException("Provider inconnu : " + provider);
         };
 
         java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
-        java.net.http.HttpRequest.Builder requestBuilder = java.net.http.HttpRequest.newBuilder()
-                .uri(java.net.URI.create(verifyUrl));
 
-        // Pour Discord et GitLab, le token se passe dans le Header
-        if (!provider.equals("google")) {
-            requestBuilder.header("Authorization", "Bearer " + token);
-        }
+        // 2. On envoie TOUJOURS le token dans le Header Authorization
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(url))
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
 
-        java.net.http.HttpResponse<String> response = client.send(
-                requestBuilder.GET().build(),
-                java.net.http.HttpResponse.BodyHandlers.ofString()
-        );
+        java.net.http.HttpResponse<String> response = client.send(request,
+                java.net.http.HttpResponse.BodyHandlers.ofString());
 
-        // 2. Si le statut est 200, le token est AUTHENTIQUE et VALIDE
+        System.out.println("--- DEBUG VERIFY [" + provider.toUpperCase() + "] ---");
+        System.out.println("Status: " + response.statusCode());
+        System.out.println("Body: " + response.body());
+
         if (response.statusCode() == 200) {
             return new ObjectMapper().readTree(response.body());
         } else {

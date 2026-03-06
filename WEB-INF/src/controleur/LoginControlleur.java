@@ -40,6 +40,8 @@ public class LoginControlleur extends HttpServlet {
 
             if (accessToken != null) {
                 resp.getWriter().write("Access Token récupéré : " + accessToken);
+            }else{
+                throw new Exception("Token null");
             }
 
         } catch (Exception e) {
