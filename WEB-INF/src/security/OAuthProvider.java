@@ -1,0 +1,107 @@
+package security;
+
+import utils.Config;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * Enum centralisant la configuration des providers OAuth supportés.
+ * Chaque provider expose ses URLs, ses scopes et son label d'affichage.
+ */
+public enum OAuthProvider {
+
+    GITLAB("gitlab",
+            "GitLab Universitaire",
+            "https://gitlab.univ-lille.fr/oauth/authorize",
+            "https://gitlab.univ-lille.fr/oauth/token",
+            "https://gitlab.univ-lille.fr/api/v4/user",
+            "read_user"),
+
+    DISCORD("discord",
+            "Discord",
+            "https://discord.com/oauth2/authorize",
+            "https://discord.com/api/oauth2/token",
+            "https://discord.com/api/users/@me",
+            "identify+email"),
+
+    GOOGLE("google",
+            "Google",
+            "https://accounts.google.com/o/oauth2/v2/auth",
+            "https://oauth2.googleapis.com/token",
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            "openid email profile");
+
+    private final String name;
+    private final String displayName;
+    private final String authorizeUrl;
+    private final String tokenUrl;
+    private final String userInfoUrl;
+    private final String scopes;
+
+    OAuthProvider(String name, String displayName, String authorizeUrl, String tokenUrl, String userInfoUrl, String scopes) {
+        this.name = name;
+        this.displayName = displayName;
+        this.authorizeUrl = authorizeUrl;
+        this.tokenUrl = tokenUrl;
+        this.userInfoUrl = userInfoUrl;
+        this.scopes = scopes;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getAuthorizeUrl() {
+        return authorizeUrl;
+    }
+
+    public String getTokenUrl() {
+        return tokenUrl;
+    }
+
+    public String getUserInfoUrl() {
+        return userInfoUrl;
+    }
+
+    public String getScopes() {
+        return scopes;
+    }
+
+    /**
+     * Construit l'URL complète d'autorisation OAuth pour ce provider.
+     * @return l'URL prête à être utilisée dans un lien href
+     */
+    public String buildAuthorizeUrl() {
+        String redirectUri = URLEncoder.encode(Config.get("redirect_uri"), StandardCharsets.UTF_8) + "%3Ffrom%3D" + name;
+
+        return authorizeUrl
+                + "?client_id=" + Config.get(name + ".client_id")
+                + "&redirect_uri=" + redirectUri
+                + "&scope=" + URLEncoder.encode(scopes, StandardCharsets.UTF_8)
+                + "&response_type=code";
+    }
+
+    /**
+     * Résout un provider à partir de son nom (case-insensitive).
+     * @param name le nom du provider (ex: "google", "discord", "gitlab")
+     * @return le provider correspondant
+     * @throws IllegalArgumentException si le provider est inconnu
+     */
+    public static OAuthProvider fromName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Le nom du provider ne peut pas être null");
+        }
+        for (OAuthProvider provider : values()) {
+            if (provider.name.equalsIgnoreCase(name)) {
+                return provider;
+            }
+        }
+        throw new IllegalArgumentException("Provider OAuth inconnu : " + name);
+    }
+}
+
