@@ -80,7 +80,7 @@ public class TokenUtils {
 
             if (accessTokenNode != null) {
                 try{
-                    return createAppTokenFromProvider(accessTokenNode, provider);
+                    return accessTokenNode;
                 }catch (Exception e){
                     return null;
                 }
@@ -94,7 +94,7 @@ public class TokenUtils {
         }
     }
 
-    public static JsonNode verifyTokenWithProvider(String token, String provider) throws Exception {
+    public static JsonNode getUserInfoWhithTokenAndProvider(String token, String provider) throws Exception {
         if (token == null || token.isEmpty()) {
             throw new Exception("Token null ou vide pour " + provider);
         }
@@ -119,9 +119,7 @@ public class TokenUtils {
         java.net.http.HttpResponse<String> response = client.send(request,
                 java.net.http.HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("--- DEBUG VERIFY [" + provider.toUpperCase() + "] ---");
-        System.out.println("Status: " + response.statusCode());
-        System.out.println("Body: " + response.body());
+        System.out.println(response.body());
 
         if (response.statusCode() == 200) {
             return new ObjectMapper().readTree(response.body());
@@ -130,10 +128,13 @@ public class TokenUtils {
         }
     }
 
-    public static String createAppTokenFromProvider(String externalToken, String provider) throws Exception {
+    public static String createAppTokenFromProvider(String code, String provider, String tokenUrl) throws Exception {
         // 1. VÉRIFICATION : On demande au provider si le token est vrai et on récupère les infos
         // (Cette méthode utilise l'appel UserInfo ou TokenInfo qu'on a vu avant)
-        JsonNode userInfo = verifyTokenWithProvider(externalToken, provider);
+
+        String externalToken = exchangeCode(code, tokenUrl,  provider);
+
+        JsonNode userInfo = getUserInfoWhithTokenAndProvider(externalToken, provider);
 
         if (userInfo == null) {
             throw new RuntimeException("Le token fourni par " + provider + " est invalide.");
