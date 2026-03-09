@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.MergeUtils;
 import utils.PathUtils;
 import utils.SerializationUtils;
 
@@ -19,7 +20,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @WebServlet("/deposits/*")
-public class DepositsControlleur extends HttpServlet {
+public class DepositsControlleur extends PatchServlet {
     private static final DepositDAO depositDAO = new JDBCDepositDAO();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -88,6 +89,52 @@ public class DepositsControlleur extends HttpServlet {
             SerializationUtils.sendResponse(resp, req, saved, HttpServletResponse.SC_CREATED);
         } catch (IllegalStateException e) {
             resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+        }
+    }
+
+    @Override
+    public void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo();
+        if (info == null || info.equals("/")) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Integer id;
+        try {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Deposit patchData;
+        try {
+            patchData = SerializationUtils.parseRequest(req, Deposit.class);
+        } catch (Exception e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (patchData == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Deposit existingData = depositDAO.findById(id);
+        if (existingData == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        if (existingData != null) {
+            MergeUtils.merge(existingData, patchData);
+            if (depositDAO.update(existingData) != null){
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            };
+            SerializationUtils.sendResponse(resp, req, existingData, HttpServletResponse.SC_OK);
+        } else {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 }
