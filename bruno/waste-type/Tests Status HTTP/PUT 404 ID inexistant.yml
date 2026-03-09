@@ -1,0 +1,35 @@
+info:
+  name: PUT 404 - waste-type ID inexistant
+  type: http
+  seq: 8
+
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/waste-types/99999
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "id": 99999,
+        "nom": "Inexistant",
+        "pointsPerKilo": 5
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

@@ -1,0 +1,22 @@
+info:
+  name: DELETE 400 - waste-type ID non valide
+  type: http
+  seq: 11
+
+http:
+  method: DELETE
+  url: http://localhost:8080/ecodrop/waste-types/fds
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

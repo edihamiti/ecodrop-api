@@ -1,0 +1,34 @@
+info:
+  name: PATCH 404 - collection-point ID inexistant
+  type: http
+  seq: 6
+
+http:
+  method: PATCH
+  url: http://localhost:8080/ecodrop/points/99999
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "adresse": "12 Rue de la Paix",
+        "capaciteMax": 500
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

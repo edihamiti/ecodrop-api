@@ -1,0 +1,22 @@
+info:
+  name: DELETE 404 - waste-type ID inexistant
+  type: http
+  seq: 10
+
+http:
+  method: DELETE
+  url: http://localhost:8080/ecodrop/waste-types/99999
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

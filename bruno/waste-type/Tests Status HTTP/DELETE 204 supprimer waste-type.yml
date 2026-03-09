@@ -1,0 +1,22 @@
+info:
+  name: DELETE 204 - supprimer waste-type
+  type: http
+  seq: 9
+
+http:
+  method: DELETE
+  url: http://localhost:8080/ecodrop/waste-types/13
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "204"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

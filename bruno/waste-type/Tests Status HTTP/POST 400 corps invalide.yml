@@ -1,0 +1,34 @@
+info:
+  name: POST 400 - corps JSON invalide
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: http://localhost:8080/ecodrop/waste-types
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nom": "Test",
+        "pointsPerKilo": "invalide"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
