@@ -52,9 +52,20 @@ public class WasteTypesControlleur extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        WasteType wasteType = SerializationUtils.parseRequest(req, WasteType.class);
+        WasteType wasteType = null;
+        try {
+            wasteType = SerializationUtils.parseRequest(req, WasteType.class);
+        } catch (IOException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         if (wasteType == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        if (wasteType.pointsPerKilo() < 0) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "pointsPerKilo doit être un nombre positif");
             return;
         }
 

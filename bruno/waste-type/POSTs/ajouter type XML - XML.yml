@@ -10,13 +10,13 @@ http:
     - name: Accept
       value: application/xml
   body:
-    type: json
+    type: xml
     data: |-
-      {
-        "id": 3, // L'ID sera ignoré
-        "nom":"enzo",
-        "pointsPerKilo":1
-      }
+      <WasteType xmlns="">
+          <id>0</id>
+          <nom>enzo</nom>
+          <pointsPerKilo>1</pointsPerKilo>
+      </WasteType>
   auth: inherit
 
 settings:
