@@ -67,8 +67,13 @@ public class CollectionPointControlleur extends PatchServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
-        CollectionPoint patchData = SerializationUtils.parseRequest(req, CollectionPoint.class);
+        CollectionPoint patchData;
+        try {
+            patchData = SerializationUtils.parseRequest(req, CollectionPoint.class);
+        }catch (Exception e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         CollectionPoint existingRecord = collectionPointDAO.findById(id);
 
         if (existingRecord != null) {
