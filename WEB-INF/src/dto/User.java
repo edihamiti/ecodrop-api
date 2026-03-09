@@ -1,7 +1,7 @@
 package dto;
 
 // Non-utilisation d'un record pour pouvoir utiliser la methode merge de MergeUtils (record met les attributs en final)
-public class Users {
+public class User {
     private Integer id;
     private String login;
     private String password;
@@ -15,12 +15,14 @@ public class Users {
         this.role = role;
     }
 
-    public Users() {
+    public User() {
     }
 
-    public Users(Integer id, String login, String password) {
-        this.id = id;
-        this.password = password;
+    public User(Integer id, String login, String password, String role) {
+         this.id = id;
+         this.login = login;
+         this.password = password;
+         this.role = role;
     }
 
     public Integer getId() {
