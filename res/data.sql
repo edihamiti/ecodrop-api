@@ -13,13 +13,26 @@ INSERT INTO WasteType(nom, pointsPerKilo) VALUES
     ('vert', 10),
     ('gravats', 12),
     ('métaux', 30),
-    ('métaux', 30),
     ('bois', 20),
     ('plastiques', 9),
     ('textiles', 11),
     ('électronique', 22),
     ('encombrants', 14),
-    ('cartons', 7);
+    ('cartons', 7),
+    ('papier', 8),
+    ('verre', 16),
+    ('piles', 40),
+    ('ampoules', 25),
+    ('déchets alimentaires', 6),
+    ('huiles usagées', 18),
+    ('peintures', 24),
+    ('solvants', 28),
+    ('batteries', 35),
+    ('ferraille', 19),
+    ('meubles', 13),
+    ('déchets verts', 9),
+    ('radiographies', 21),
+    ('médicaments périmés', 27);
 
 CREATE TABLE CollectionPoint(
     id SERIAL PRIMARY KEY ,

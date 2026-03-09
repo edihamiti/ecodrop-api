@@ -9,6 +9,8 @@ import java.util.List;
 
 public class JDBCCollectionPointDAO implements CollectionPointDAO{
     private static DS bdd = new DS();
+    public static final int DEFAULT_LIMIT = 20;
+    public static final int DEFAULT_OFFSET = 0;
 
     @Override
     public CollectionPoint findById(int id) {
@@ -27,9 +29,16 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
 
     @Override
     public List<CollectionPoint> findAll() {
+        return findAll(DEFAULT_LIMIT, DEFAULT_OFFSET);
+    }
+
+    @Override
+    public List<CollectionPoint> findAll(int limit, int offset) {
         List<CollectionPoint> collectionPoints = new ArrayList<>();
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM collectionpoint");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM collectionpoint LIMIT ? OFFSET ?");
+            ps.setInt(1, limit);
+            ps.setInt(2, offset);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 collectionPoints.add(new CollectionPoint(rs.getInt(1), rs.getString(2), rs.getInt(3)));
@@ -38,6 +47,11 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
             return null;
         }
         return collectionPoints;
+    }
+
+    @Override
+    public List<CollectionPoint> findAll(int limit) {
+        return findAll(limit, DEFAULT_OFFSET);
     }
 
     @Override

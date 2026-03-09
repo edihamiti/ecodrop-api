@@ -7,6 +7,8 @@ import java.util.List;
 public interface WasteTypeDAO {
     public WasteType findById(int id);
     public List<WasteType> findAll();
+    public List<WasteType> findAll(int limit, int offset);
+    public List<WasteType> findAll(int limit);
 
     /**
      * Sauvegarde le wasteType en générant un ID unique

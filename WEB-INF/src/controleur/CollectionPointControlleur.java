@@ -3,6 +3,7 @@ package controleur;
 import dao.CollectionPointDAO;
 import dao.JDBCCollectionPointDAO;
 import dto.CollectionPoint;
+import dto.WasteType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,18 @@ public class CollectionPointControlleur extends PatchServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String info = req.getPathInfo();
         if (info == null || info.equals("/")) {
-            Collection<CollectionPoint> l = collectionPointDAO.findAll();
+            int limit = utils.ParamUtils.getLimit(req);
+            int offset = utils.ParamUtils.getOffset(req);
+            Collection<CollectionPoint> l;
+
+            if (limit > 0 && offset >= 0) {
+                l = collectionPointDAO.findAll(limit, offset);
+            } else if (limit > 0) {
+                l = collectionPointDAO.findAll(limit);
+            } else {
+                l = collectionPointDAO.findAll();
+            }
+
             if (l == null) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
