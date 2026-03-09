@@ -119,7 +119,7 @@ public class JDBCDepositDAO implements DepositDAO {
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) {
                 int generatedId = keys.getInt(1);
-                return new Deposit(generatedId, deposit.getUserId(), deposit.getPoint(), deposit.getWasteType(), deposit.getWeight());
+                return findById(generatedId);
             }
             return null;
         } catch (SQLException e) {
