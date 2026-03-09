@@ -1,0 +1,36 @@
+info:
+  name: PUT 200 - mettre à jour deposit
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/deposits/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "userId": 1,
+        "point": { "id": 1 },
+        "wasteType": { "id": 1 },
+        "weight": 12.5
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
