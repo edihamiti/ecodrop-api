@@ -149,20 +149,31 @@ INSERT INTO Accepts(pointid, wastetypeid) VALUES
 
 CREATE TABLE Users(
     id SERIAL PRIMARY KEY ,
-    username TEXT,
-    password TEXT);
+    login TEXT,
+    password TEXT,
+    role TEXT);
 
-INSERT INTO Users(username, password) VALUES
-    ('Enzo', 'enzo le zozo'),
-    ('Edi', 'edi le zozo'),
-    ('Bastien', 'bastien le zozo'),
-    ('Léo', 'leo le zozo'),
-    ('Mathis', 'mathis le zozo'),
-    ('Léa', 'lea le zozo'),
-    ('Camille', 'camille le zozo'),
-    ('Sophie', 'sophie le zozo'),
-    ('Lucas', 'lucas le zozo'),
-    ('Manon', 'manon le zozo');
+INSERT INTO Users(username, password, role) VALUES
+    ('enzo', 'enzo le zozo', 'USER'),
+    ('alice', 'alice le zozo', 'USER'),
+    ('bob', 'bob le zozo', 'USER'),
+    ('charlie', 'charlie le zozo', 'USER'),
+    ('dave', 'dave le zozo', 'USER'),
+    ('eve', 'eve le zozo', 'USER'),
+    ('frank', 'frank le zozo', 'USER'),
+    ('grace', 'grace le zozo', 'USER'),
+    ('heidi', 'heidi le zozo', 'USER'),
+    ('ivan', 'ivan le zozo', 'USER'),
+    ('ADMIN', 'ADMIN', 'ADMIN'),
+    ('jonas', 'jonas le goat', 'ADMIN'),
+    ('lucas', 'lucas le goat', 'ADMIN'),
+    ('maria', 'maria la goat', 'ADMIN'),
+    ('sophie', 'sophie la goat', 'ADMIN'),
+    ('nina', 'nina la goat', 'ADMIN'),
+    ('leo', 'leo le goat', 'ADMIN'),
+    ('emma', 'emma la goat', 'ADMIN'),
+    ('oliver', 'oliver le goat', 'ADMIN'),
+    ('ava', 'ava la goat', 'ADMIN');
 
 
 CREATE TABLE Deposit(
