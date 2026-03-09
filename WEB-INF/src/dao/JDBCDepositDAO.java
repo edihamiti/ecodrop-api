@@ -129,7 +129,19 @@ public class JDBCDepositDAO implements DepositDAO {
 
     @Override
     public Deposit update(Deposit deposit) {
-        throw new UnsupportedOperationException();
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET userid = ?, pointid = ?, wasteTypeId = ?, poids = ? WHERE id = ?");
+            ps.setInt(1, deposit.getUserId());
+            ps.setInt(2, deposit.getPoint().getId());
+            ps.setInt(3, deposit.getWasteType().id());
+            ps.setDouble(4, deposit.getWeight());
+            ps.setInt(5, deposit.getId());
+            int affected = ps.executeUpdate();
+            if (affected == 0) return null;
+            return findById(deposit.getId());
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override
