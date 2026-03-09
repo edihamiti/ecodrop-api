@@ -1,0 +1,32 @@
+info:
+  name: ajouter type Erreur pointsPerKilo
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: http://localhost:8080/ecodrop/waste-types
+  headers:
+    - name: Accept
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "id": 3,
+        "nom":"enzo",
+        "pointsPerKilo":fdsjh // Ne passera pas
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: ""
+      operator: eq
+      value: ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
