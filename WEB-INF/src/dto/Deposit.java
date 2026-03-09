@@ -3,18 +3,22 @@ package dto;
 // Non-utilisation d'un record pour pouvoir utiliser la methode merge de MergeUtils (record met les attributs en final)
 public class Deposit {
     private int id;
-    private int userId;
-    private int pointId;
+    private User user;
+    private CollectionPoint point;
+
+
+    private WasteType wasteType;
     private double weight;
 
     public Deposit() {
     }
 
-    public Deposit(int id, int userId, int pointId, double weight) {
+    public Deposit(int id, User user, CollectionPoint point, WasteType wasteType, double weight) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.weight = weight;
-        this.pointId = pointId;
+        this.wasteType = wasteType;
+        this.point = point;
     }
 
     public int getId() {
@@ -25,20 +29,27 @@ public class Deposit {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getPointId() {
-        return pointId;
+    public CollectionPoint getPoint() {
+        return point;
     }
 
-    public void setPointId(int pointId) {
-        this.pointId = pointId;
+    public void setPoint(CollectionPoint point) {
+        this.point = point;
+    }
+    public WasteType getWasteType() {
+        return wasteType;
+    }
+
+    public void setWasteType(WasteType wasteType) {
+        this.wasteType = wasteType;
     }
 
     public double getWeight() {
