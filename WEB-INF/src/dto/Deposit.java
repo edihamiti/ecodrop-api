@@ -4,17 +4,21 @@ package dto;
 public class Deposit {
     private int id;
     private int userId;
-    private int pointId;
+    private CollectionPoint point;
+
+
+    private WasteType wasteType;
     private double weight;
 
     public Deposit() {
     }
 
-    public Deposit(int id, int userId, int pointId, double weight) {
+    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight) {
         this.id = id;
         this.userId = userId;
         this.weight = weight;
-        this.pointId = pointId;
+        this.wasteType = wasteType;
+        this.point = point;
     }
 
     public int getId() {
@@ -33,12 +37,19 @@ public class Deposit {
         this.userId = userId;
     }
 
-    public int getPointId() {
-        return pointId;
+    public CollectionPoint getPoint() {
+        return point;
     }
 
-    public void setPointId(int pointId) {
-        this.pointId = pointId;
+    public void setPoint(CollectionPoint point) {
+        this.point = point;
+    }
+    public WasteType getWasteType() {
+        return wasteType;
+    }
+
+    public void setWasteType(WasteType wasteType) {
+        this.wasteType = wasteType;
     }
 
     public double getWeight() {
