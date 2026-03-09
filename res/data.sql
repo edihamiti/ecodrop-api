@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS WasteType;
 DROP TABLE IF EXISTS CollectionPoint;
 
 CREATE TABLE WasteType(
-    id SERIAL PRIMARY KEY ,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nom TEXT,
     pointsPerKilo INT);
 
