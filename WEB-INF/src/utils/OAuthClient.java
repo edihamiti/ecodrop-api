@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.UserInfo;
 import security.OAuthProvider;
+
+import javax.swing.*;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -48,6 +50,7 @@ public class OAuthClient {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(provider.getTokenUrl()))
                 .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Accept", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
