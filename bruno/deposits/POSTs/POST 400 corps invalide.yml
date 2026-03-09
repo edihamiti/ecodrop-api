@@ -1,0 +1,31 @@
+info:
+  name: POST 400 - corps JSON invalide
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/ecodrop/deposits/
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      { "userId": 1, "point": { "id": 1 }, "wasteType": { "id": 1 }, "weight":
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

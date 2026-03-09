@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS Accepts;
-DROP TABLE IF EXISTS WasteType;
 DROP TABLE IF EXISTS Deposit;
 DROP TABLE IF EXISTS CollectionPoint;;
 DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS WasteType;
 
 CREATE TABLE WasteType(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -40,7 +40,7 @@ CREATE TABLE CollectionPoint(
     capaciteMax INT);
 
 INSERT INTO CollectionPoint(adresse, capaciteMax) VALUES
-    ('30 rue de la Brasserie Ronchin', 15),
+    ('30 rue de la Brasserie Ronchin', 150),
     ('29 rue boileau Armentières', 12),
     ('28 rue de la Brasserie Ronchin', 10),
     ('27 rue de la Brasserie Ronchin', 8),

@@ -63,4 +63,31 @@ public class DepositsControlleur extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Deposit deposit;
+        try {
+            deposit = SerializationUtils.parseRequest(req, Deposit.class);
+        } catch (IOException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Corps de la requête invalide");
+            return;
+        }
+
+        if (deposit == null || deposit.getPoint() == null || deposit.getWasteType() == null || deposit.getWeight() <= 0) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Données du dépôt invalides");
+            return;
+        }
+
+        try {
+            Deposit saved = depositDAO.save(deposit);
+            if (saved == null) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+            SerializationUtils.sendResponse(resp, req, saved, HttpServletResponse.SC_CREATED);
+        } catch (IllegalStateException e) {
+            resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+        }
+    }
 }

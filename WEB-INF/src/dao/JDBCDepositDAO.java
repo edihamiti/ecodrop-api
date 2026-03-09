@@ -5,10 +5,7 @@ import dto.CollectionPoint;
 import dto.Deposit;
 import dto.WasteType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +52,79 @@ public class JDBCDepositDAO implements DepositDAO {
         return findAll(limit, DEFAULT_OFFSET);
     }
 
+    /**
+     * Retourne le poids total des dépôts pour un point de collecte donné.
+     */
+    public double getTotalWeightByPoint(int pointId) {
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT SUM(poids) FROM Deposit WHERE pointid = ?");
+            ps.setInt(1, pointId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                // SUM retourne NULL s'il n'y a aucun dépôt, wasNull() permet de le détecter
+                double total = rs.getDouble(1);
+                if (rs.wasNull()) return 0;
+                return total;
+            }
+        } catch (SQLException e) {
+            return -1;
+        }
+        return 0;
+    }
+
+    /**
+     * Vérifie si l'ajout du dépôt ne dépasse pas la capacité du point de collecte.
+     * @return true si le dépôt peut être accepté, false sinon.
+     */
+    public boolean canAcceptDeposit(int pointId, double weight) {
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                "SELECT cp.capaciteMax, SUM(d.poids) AS totalWeight " +
+                "FROM CollectionPoint cp LEFT JOIN Deposit d ON d.pointid = cp.id " +
+                "WHERE cp.id = ? GROUP BY cp.capaciteMax"
+            );
+            ps.setInt(1, pointId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int capaciteMax = rs.getInt(1);
+                double totalWeight = rs.getDouble(2);
+                // SUM retourne NULL s'il n'y a aucun dépôt, wasNull() permet de le détecter
+                if (rs.wasNull()) totalWeight = 0;
+                return (totalWeight + weight) <= capaciteMax;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+        return false;
+    }
+
     @Override
     public Deposit save(Deposit deposit) {
-        throw new UnsupportedOperationException();
+        int pointId = deposit.getPoint().getId();
+        double weight = deposit.getWeight();
+
+        // Vérifier que le dépôt ne dépasse pas la capacité du point de collecte
+        if (!canAcceptDeposit(pointId, weight)) {
+            throw new IllegalStateException("Le poids total des dépôts dépasse la capacité maximale du point de collecte");
+        }
+
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO deposit(userid, pointid, wasteTypeId, poids) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, deposit.getUserId());
+            ps.setInt(2, deposit.getPoint().getId());
+            ps.setInt(3, deposit.getWasteType().id());
+            ps.setDouble(4, deposit.getWeight());
+            int affected = ps.executeUpdate();
+            if (affected == 0) return null;
+            ResultSet keys = ps.getGeneratedKeys();
+            if (keys.next()) {
+                int generatedId = keys.getInt(1);
+                return new Deposit(generatedId, deposit.getUserId(), deposit.getPoint(), deposit.getWasteType(), deposit.getWeight());
+            }
+            return null;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override
