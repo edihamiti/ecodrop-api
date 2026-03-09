@@ -118,6 +118,10 @@ public class OAuthClient {
                     getField(json, "email"),
                     getField(json, "username")
             );
+            case GITHUB -> new UserInfo(
+                    getField(json, "email"),
+                    getField(json, "username")
+            );
         };
     }
 
