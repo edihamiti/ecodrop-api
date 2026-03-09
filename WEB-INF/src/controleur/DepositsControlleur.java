@@ -2,13 +2,10 @@ package controleur;
 
 import dao.DepositDAO;
 import dao.JDBCDepositDAO;
-import dao.JDBCWasteTypeDAO;
-import dao.WasteTypeDAO;
+import dto.CollectionPoint;
 import dto.Deposit;
-import dto.WasteType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import utils.MergeUtils;
@@ -17,7 +14,6 @@ import utils.SerializationUtils;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Objects;
 
 @WebServlet("/deposits/*")
 public class DepositsControlleur extends PatchServlet {
@@ -136,5 +132,51 @@ public class DepositsControlleur extends PatchServlet {
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo();
+        if (info == null || info.equals("/")) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Integer id;
+        try {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Deposit putData;
+        try {
+            putData = SerializationUtils.parseRequest(req, Deposit.class);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Corps de la requête invalide");
+            return;
+        }
+
+        if (putData == null || putData.getPoint() == null || putData.getWasteType() == null || putData.getWeight() <= 0) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Données du dépôt invalides ou champs manquants");
+            return;
+        }
+
+        Deposit existing = depositDAO.findById(id);
+        if (existing == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        putData.setId(id);
+
+        Deposit updated = depositDAO.update(putData);
+        if (updated == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
+        SerializationUtils.sendResponse(resp, req, updated, HttpServletResponse.SC_OK);
     }
 }
