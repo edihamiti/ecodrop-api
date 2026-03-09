@@ -153,7 +153,7 @@ CREATE TABLE Users(
     password TEXT,
     role TEXT);
 
-INSERT INTO Users(username, password, role) VALUES
+INSERT INTO Users(login, password, role) VALUES
     ('enzo', 'enzo le zozo', 'USER'),
     ('alice', 'alice le zozo', 'USER'),
     ('bob', 'bob le zozo', 'USER'),
