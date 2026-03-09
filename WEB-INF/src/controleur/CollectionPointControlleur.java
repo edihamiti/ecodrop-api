@@ -98,4 +98,50 @@ public class CollectionPointControlleur extends PatchServlet {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo();
+        if (info == null || info.equals("/")) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        Integer id;
+        try {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        CollectionPoint putData;
+        try {
+            putData = SerializationUtils.parseRequest(req, CollectionPoint.class);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        if (putData == null || putData.getAdresse() == null || putData.getCapaciteMax() == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        CollectionPoint existingRecord = collectionPointDAO.findById(id);
+        if (existingRecord == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        // L'ID ne peut pas être mis à jour, on force celui de l'URL
+        putData.setId(id);
+
+        CollectionPoint updated = collectionPointDAO.update(putData);
+        if (updated == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        SerializationUtils.sendResponse(resp, req, updated, HttpServletResponse.SC_OK);
+    }
 }
