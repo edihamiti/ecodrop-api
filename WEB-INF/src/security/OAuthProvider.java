@@ -12,7 +12,8 @@ import java.nio.charset.StandardCharsets;
 public enum OAuthProvider {
 
     GITLAB("gitlab",
-            "GitLab Universitaire",
+            "GitLab",
+            "bi-gitlab", "#fc6d26",
             "https://gitlab.univ-lille.fr/oauth/authorize",
             "https://gitlab.univ-lille.fr/oauth/token",
             "https://gitlab.univ-lille.fr/api/v4/user",
@@ -20,6 +21,7 @@ public enum OAuthProvider {
 
     DISCORD("discord",
             "Discord",
+            "bi-discord", "#5865F2",
             "https://discord.com/oauth2/authorize",
             "https://discord.com/api/oauth2/token",
             "https://discord.com/api/users/@me",
@@ -27,13 +29,15 @@ public enum OAuthProvider {
 
     GOOGLE("google",
             "Google",
+            "bi-google", "#ea4335",
             "https://accounts.google.com/o/oauth2/v2/auth",
             "https://oauth2.googleapis.com/token",
             "https://www.googleapis.com/oauth2/v3/userinfo",
             "openid email profile"),
 
     GITHUB("github",
-           "Github",
+           "GitHub",
+           "bi-github", "#181717",
            "https://github.com/login/oauth/authorize",
            "https://github.com/login/oauth/access_token",
            "https://api.github.com/user",
@@ -41,14 +45,18 @@ public enum OAuthProvider {
 
     private final String name;
     private final String displayName;
+    private final String icon;
+    private final String color;
     private final String authorizeUrl;
     private final String tokenUrl;
     private final String userInfoUrl;
     private final String scopes;
 
-    OAuthProvider(String name, String displayName, String authorizeUrl, String tokenUrl, String userInfoUrl, String scopes) {
+    OAuthProvider(String name, String displayName, String icon, String color, String authorizeUrl, String tokenUrl, String userInfoUrl, String scopes) {
         this.name = name;
         this.displayName = displayName;
+        this.icon = icon;
+        this.color = color;
         this.authorizeUrl = authorizeUrl;
         this.tokenUrl = tokenUrl;
         this.userInfoUrl = userInfoUrl;
@@ -61,6 +69,14 @@ public enum OAuthProvider {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public String getAuthorizeUrl() {
