@@ -1,0 +1,29 @@
+info:
+  name: PUT 400 - champs manquants collection-point
+  type: http
+  seq: 10
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/points/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "adresse": "Rue sans capacité"
+      }
+  auth: inherit
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

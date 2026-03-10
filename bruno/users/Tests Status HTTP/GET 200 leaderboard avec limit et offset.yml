@@ -6,7 +6,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/ecodrop/users?limit=5&offset=0
+  url: http://localhost:8080/ecodrop/users/leaderboard?limit=5&offset=0
   headers:
     - name: Accept
       value: application/json

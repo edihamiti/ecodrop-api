@@ -1,0 +1,30 @@
+info:
+  name: PUT 400 - ID non valide collection-point
+  type: http
+  seq: 11
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/points/abc
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "adresse": "Test",
+        "capaciteMax": 100
+      }
+  auth: inherit
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

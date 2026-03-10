@@ -1,0 +1,34 @@
+info:
+  name: PUT 200 - mettre à jour collection-point
+  type: http
+  seq: 9
+
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/points/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "adresse": "30 rue de la Brasserie Ronchin",
+        "capaciteMax": 200
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

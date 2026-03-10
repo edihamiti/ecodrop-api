@@ -1,0 +1,31 @@
+info:
+  name: PUT 200 - mettre à jour user
+  type: http
+  seq: 9
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/users/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "login": "enzo_updated",
+        "password": "nouveau_mdp",
+        "role": "USER"
+      }
+  auth: inherit
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

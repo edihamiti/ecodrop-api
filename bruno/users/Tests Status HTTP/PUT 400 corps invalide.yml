@@ -1,0 +1,29 @@
+info:
+  name: PUT 400 - corps invalide user
+  type: http
+  seq: 10
+http:
+  method: PUT
+  url: http://localhost:8080/ecodrop/users/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "login": "seulementLogin"
+      }
+  auth: inherit
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
