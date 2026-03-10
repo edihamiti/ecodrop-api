@@ -39,6 +39,12 @@ public class SecurityFilter implements Filter {
             return;
         }
 
+        if (req.getMethod().equalsIgnoreCase("GET")) {
+            // GET, on laisse passer
+            chain.doFilter(request, response);
+            return;
+        }
+
         // --- Logique de sécurité pour tout le reste ---
         String authHeader = req.getHeader("Authorization");
         String token = JwtUtils.extractToken(authHeader);
