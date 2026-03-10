@@ -124,13 +124,7 @@ public class OAuthClient {
             case GITHUB, GITEA ->
                 new UserInfo(getField(json, "email"), getField(json, "login"));
 
-            case MICROSOFT -> {
-                String email = getField(json, "mail");
-                if (email == null) email = getField(json, "userPrincipalName");
-                yield new UserInfo(email, getField(json, "displayName"));
-            }
-
-            case FACEBOOK, APPLE ->
+            case FACEBOOK ->
                 new UserInfo(getField(json, "email"), getField(json, "name"));
 
             case TWITTER -> {
@@ -144,31 +138,8 @@ public class OAuthClient {
             case SPOTIFY, DEEZER ->
                 new UserInfo(getField(json, "email"), getField(json, "display_name"));
 
-            case TWITCH -> {
-                JsonNode data = json.has("data") && json.get("data").isArray() && !json.get("data").isEmpty()
-                        ? json.get("data").get(0) : json;
-                yield new UserInfo(getField(data, "email"), getField(data, "display_name"));
-            }
-
-            case SLACK -> {
-                JsonNode user = json.has("user") ? json.get("user") : json;
-                yield new UserInfo(getField(user, "email"), getField(user, "name"));
-            }
-
             case BITBUCKET ->
                 new UserInfo(null, getField(json, "username"));
-
-            case REDDIT ->
-                new UserInfo(null, getField(json, "name"));
-
-            case AMAZON ->
-                new UserInfo(getField(json, "email"), getField(json, "name"));
-
-            case DROPBOX -> {
-                JsonNode nameNode = json.get("name");
-                String displayName = nameNode != null ? getField(nameNode, "display_name") : null;
-                yield new UserInfo(getField(json, "email"), displayName);
-            }
 
             case STRIPE ->
                 new UserInfo(getField(json, "email"), getField(json, "display_name"));

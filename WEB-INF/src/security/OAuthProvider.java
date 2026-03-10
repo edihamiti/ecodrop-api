@@ -43,22 +43,6 @@ public enum OAuthProvider {
            "https://api.github.com/user",
            "user:email"),
 
-    MICROSOFT("microsoft",
-              "Microsoft",
-              "bi-microsoft", "#00a4ef",
-              "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-              "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-              "https://graph.microsoft.com/v1.0/me",
-              "openid email profile User.Read"),
-
-    APPLE("apple",
-          "Apple",
-          "bi-apple", "#000000",
-          "https://appleid.apple.com/auth/authorize",
-          "https://appleid.apple.com/auth/token",
-          "https://appleid.apple.com/auth/userinfo",
-          "name email"),
-
     FACEBOOK("facebook",
              "Facebook",
              "bi-facebook", "#1877f2",
@@ -73,7 +57,7 @@ public enum OAuthProvider {
             "https://twitter.com/i/oauth2/authorize",
             "https://api.twitter.com/2/oauth2/token",
             "https://api.twitter.com/2/users/me?user.fields=name,username,profile_image_url",
-            "users.read tweet.read offline.access"),
+            "users.read tweet.read offline.access"), // fait, à tester
 
     LINKEDIN("linkedin",
              "LinkedIn",
@@ -81,7 +65,7 @@ public enum OAuthProvider {
              "https://www.linkedin.com/oauth/v2/authorization",
              "https://www.linkedin.com/oauth/v2/accessToken",
              "https://api.linkedin.com/v2/userinfo",
-             "openid profile email"),
+             "openid profile email"), // fonctionnel
 
     SPOTIFY("spotify",
             "Spotify",
@@ -89,23 +73,7 @@ public enum OAuthProvider {
             "https://accounts.spotify.com/authorize",
             "https://accounts.spotify.com/api/token",
             "https://api.spotify.com/v1/me",
-            "user-read-email user-read-private"),
-
-    TWITCH("twitch",
-           "Twitch",
-           "bi-twitch", "#9146ff",
-           "https://id.twitch.tv/oauth2/authorize",
-           "https://id.twitch.tv/oauth2/token",
-           "https://api.twitch.tv/helix/users",
-           "user:read:email"),
-
-    SLACK("slack",
-          "Slack",
-          "bi-slack", "#4a154b",
-          "https://slack.com/oauth/v2/authorize",
-          "https://slack.com/api/oauth.v2.access",
-          "https://slack.com/api/users.identity",
-          "identity.basic identity.email"),
+            "user-read-email user-read-private"), // pas fonctionnel pcq le redirect uri *doit* utiliser 127.0.0.1 au lieu de localhost et j'ai la flemme de changer comment tout le systeme fonctionne pour lui
 
     BITBUCKET("bitbucket",
               "Bitbucket",
@@ -113,39 +81,7 @@ public enum OAuthProvider {
               "https://bitbucket.org/site/oauth2/authorize",
               "https://bitbucket.org/site/oauth2/access_token",
               "https://api.bitbucket.org/2.0/user",
-              "account email"),
-
-    REDDIT("reddit",
-           "Reddit",
-           "bi-reddit", "#ff4500",
-           "https://www.reddit.com/api/v1/authorize",
-           "https://www.reddit.com/api/v1/access_token",
-           "https://oauth.reddit.com/api/v1/me",
-           "identity"),
-
-    AMAZON("amazon",
-           "Amazon",
-           "bi-bag-fill", "#ff9900",
-           "https://www.amazon.com/ap/oa",
-           "https://api.amazon.com/auth/o2/token",
-           "https://api.amazon.com/user/profile",
-           "profile"),
-
-    DROPBOX("dropbox",
-            "Dropbox",
-            "bi-dropbox", "#0061ff",
-            "https://www.dropbox.com/oauth2/authorize",
-            "https://api.dropboxapi.com/oauth2/token",
-            "https://api.dropboxapi.com/2/users/get_current_account",
-            "account_info.read"),
-
-    YAHOO("yahoo",
-          "Yahoo",
-          "bi-envelope-fill", "#6001d2",
-          "https://api.login.yahoo.com/oauth2/request_auth",
-          "https://api.login.yahoo.com/oauth2/get_token",
-          "https://api.login.yahoo.com/openid/v1/userinfo",
-          "openid email profile"),
+              "account email"), // je comprends pas pourquoi ça fonctionne
 
     PAYPAL("paypal",
            "PayPal",
