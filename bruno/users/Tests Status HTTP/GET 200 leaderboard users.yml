@@ -1,0 +1,25 @@
+info:
+  name: GET 200 - leaderboard users
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:8080/ecodrop/users
+  headers:
+    - name: Accept
+      value: application/json
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+

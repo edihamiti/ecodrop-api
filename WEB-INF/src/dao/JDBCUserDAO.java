@@ -32,7 +32,7 @@ public class JDBCUserDAO implements UserDAO {
 
 
     public Collection<LeaderBoardUser> leaderboard(int limit) {
-        return leaderboard(limit, 0);
+        return leaderboard(limit, Integer.parseInt(Config.get("default_offset")));
     }
 
     public Collection<LeaderBoardUser> leaderboard(){
@@ -64,7 +64,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User findById(int id) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM User WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

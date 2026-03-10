@@ -1,0 +1,33 @@
+info:
+  name: PATCH 400 - corps invalide
+  type: http
+  seq: 7
+
+http:
+  method: PATCH
+  url: http://localhost:8080/ecodrop/users/1
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "id": "invalide"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
