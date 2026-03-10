@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.Date;
+
 // Non-utilisation d'un record pour pouvoir utiliser la methode merge de MergeUtils (record met les attributs en final)
 public class Deposit {
     private int id;
@@ -9,16 +11,18 @@ public class Deposit {
 
     private WasteType wasteType;
     private double weight;
+    private Date date;
 
     public Deposit() {
     }
 
-    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight) {
+    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight, Date date) {
         this.id = id;
         this.userId = userId;
         this.weight = weight;
         this.wasteType = wasteType;
         this.point = point;
+        this.date = date;
     }
 
     public int getId() {
@@ -58,5 +62,13 @@ public class Deposit {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
