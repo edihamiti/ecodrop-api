@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 
 public class Import {
-    static void main() {
+    public static void main(String[] args) {
         DS bdd = new DS();
         try (Connection con = bdd.getConnection();
              InputStream csv = Import.class.getClassLoader().getResourceAsStream("Data.csv")) {
@@ -20,7 +20,8 @@ public class Import {
             );
             System.out.println(rows + " lignes insérées avec succès.");
         } catch (Exception e) {
-            System.out.println("Import échoué : " + e.getMessage());
+            System.err.println("Import échoué : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

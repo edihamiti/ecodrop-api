@@ -113,6 +113,9 @@ public class WasteTypesControlleur extends HttpServlet {
 
             resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
 
+        } catch (IllegalStateException e) {
+            // Le type est utilisé dans des dépôts → 409 Conflict
+            resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
         } catch (IllegalArgumentException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }

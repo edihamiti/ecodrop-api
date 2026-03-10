@@ -2,7 +2,6 @@ package controleur;
 
 import dao.JDBCUserDAO;
 import dao.UserDAO;
-import dto.CollectionPoint;
 import dto.LeaderBoardUser;
 import dto.User;
 import jakarta.servlet.ServletException;
@@ -17,13 +16,15 @@ import java.io.IOException;
 import java.util.Collection;
 
 @WebServlet("/users/*")
-public class UserControlleur extends PatchServlet{
+public class UserControlleur extends PatchServlet {
     private final UserDAO usersDAO = new JDBCUserDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String info = req.getPathInfo();
-        if (info == null || info.equals("/")) {
+
+        // GET /users/leaderboard
+        if ("/leaderboard".equals(info)) {
             int limit = utils.ParamUtils.getLimit(req);
             int offset = utils.ParamUtils.getOffset(req);
             Collection<LeaderBoardUser> l;
@@ -53,10 +54,10 @@ public class UserControlleur extends PatchServlet{
     }
 
     @Override
-    public void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String info = req.getPathInfo();
         if (info == null || info.equals("/")) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
@@ -67,23 +68,76 @@ public class UserControlleur extends PatchServlet{
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        User patchData;
+
+        User existing = usersDAO.findById(id);
+        if (existing == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        User putData;
         try {
-            patchData = SerializationUtils.parseRequest(req, User.class);
-        }catch (Exception e){
+            putData = SerializationUtils.parseRequest(req, User.class);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Corps de la requête invalide");
+            return;
+        }
+
+        if (putData == null || putData.getLogin() == null || putData.getPassword() == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Champs login et password obligatoires");
+            return;
+        }
+
+        putData.setId(id);
+        User updated = usersDAO.update(putData);
+        if (updated == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        SerializationUtils.sendResponse(resp, req, updated, HttpServletResponse.SC_OK);
+    }
+
+    @Override
+    public void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo();
+        if (info == null || info.equals("/")) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        User existingRecord = usersDAO.findById(id);
 
-        if (existingRecord != null) {
-            MergeUtils.merge(existingRecord, patchData);
-            if (usersDAO.update(existingRecord) != null){
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            };
-            SerializationUtils.sendResponse(resp, req, existingRecord, HttpServletResponse.SC_OK);
-        } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        Integer id;
+        try {
+            id = PathUtils.parseId(info);
+        } catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
+
+        User patchData;
+        try {
+            patchData = SerializationUtils.parseRequest(req, User.class);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        if (patchData == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        User existingRecord = usersDAO.findById(id);
+        if (existingRecord == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        MergeUtils.merge(existingRecord, patchData);
+        // Correction du bug : 500 si update échoue (null), pas si ça réussit
+        if (usersDAO.update(existingRecord) == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        SerializationUtils.sendResponse(resp, req, existingRecord, HttpServletResponse.SC_OK);
     }
 }

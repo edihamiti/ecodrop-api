@@ -17,12 +17,12 @@ public class JDBCUserDAO implements UserDAO {
 
     @Override
     public User update(User user) {
-        try (Connection con = bdd.getConnection()){
-            PreparedStatement ps = con.prepareStatement("UPDATE User SET login = ?, password = ?, role = ? WHERE id = ?");
-            ps.setInt(4, user.getId());
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, password = ?, role = ? WHERE id = ?");
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
-            ps.setString(3, user.getPassword());
+            ps.setString(3, user.getRole());   // Correction : était user.getPassword()
+            ps.setInt(4, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             return null;

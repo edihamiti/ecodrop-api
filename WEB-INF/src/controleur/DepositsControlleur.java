@@ -71,8 +71,14 @@ public class DepositsControlleur extends PatchServlet {
             return;
         }
 
-        if (deposit == null || deposit.getPoint() == null || deposit.getWasteType() == null || deposit.getWeight() <= 0) {
+        if (deposit == null || deposit.getPoint() == null || deposit.getWasteType() == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Données du dépôt invalides");
+            return;
+        }
+
+        // 400 si le poids est négatif ou nul
+        if (deposit.getWeight() <= 0) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le poids doit être un nombre positif");
             return;
         }
 
@@ -84,7 +90,8 @@ public class DepositsControlleur extends PatchServlet {
             }
             SerializationUtils.sendResponse(resp, req, saved, HttpServletResponse.SC_CREATED);
         } catch (IllegalStateException e) {
-            resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            // 403 Forbidden si le point de collecte est saturé
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         }
     }
 
@@ -124,10 +131,11 @@ public class DepositsControlleur extends PatchServlet {
 
         if (existingData != null) {
             MergeUtils.merge(existingData, patchData);
-            if (depositDAO.update(existingData) != null){
+            // Correction du bug : 500 si update échoue (null), pas si ça réussit
+            if (depositDAO.update(existingData) == null) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
-            };
+            }
             SerializationUtils.sendResponse(resp, req, existingData, HttpServletResponse.SC_OK);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
