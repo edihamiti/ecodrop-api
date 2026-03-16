@@ -131,15 +131,24 @@ public class JDBCDepositDAO implements DepositDAO {
     @Override
     public Deposit update(Deposit deposit) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET userid = ?, pointid = ?, wasteTypeId = ?, poids = ? WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET userid = ?, pointid = ?, wasteTypeId = ?, poids = ?, datedepot = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, deposit.getUserId());
             ps.setInt(2, deposit.getPoint().getId());
             ps.setInt(3, deposit.getWasteType().id());
             ps.setDouble(4, deposit.getWeight());
-            ps.setInt(5, deposit.getId());
+            ps.setDate(5, new Date(deposit.getDateDepot().getTime()));
+            ps.setInt(6, deposit.getId());
             int affected = ps.executeUpdate();
             if (affected == 0) return null;
-            return findById(deposit.getId());
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                CollectionPointDAO collectionPointDAO = new JDBCCollectionPointDAO();
+                WasteTypeDAO wasteTypeDAO = new JDBCWasteTypeDAO();
+                CollectionPoint point = collectionPointDAO.findById(rs.getInt(3));
+                WasteType wasteType = wasteTypeDAO.findById(rs.getInt(4));
+                return new Deposit(rs.getInt(1), rs.getInt(2), point, wasteType, rs.getDouble(5), rs.getDate(6));
+            }
+            return null;
         } catch (SQLException e) {
             return null;
         }

@@ -18,7 +18,7 @@ http:
         "userId": 1,
         "point": { "id": 1 },
         "wasteType": { "id": 1 },
-        "weight": 12.5
+        "weight": 100
       }
   auth: inherit
 
@@ -33,4 +33,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

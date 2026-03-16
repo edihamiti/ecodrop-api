@@ -4,13 +4,13 @@ import java.util.Date;
 
 // Non-utilisation d'un record pour pouvoir utiliser la methode merge de MergeUtils (record met les attributs en final)
 public class Deposit {
-    private int id;
-    private int userId;
+    private Integer id;
+    private Integer userId;
     private CollectionPoint point;
 
 
     private WasteType wasteType;
-    private double weight;
+    private Double weight;
     private Date dateDepot;
 
     public Deposit() {

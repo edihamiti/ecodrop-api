@@ -134,7 +134,6 @@ public class DepositsControlleur extends PatchServlet {
 
         if (existingData != null) {
             MergeUtils.merge(existingData, patchData);
-            // Correction du bug : 500 si update échoue (null), pas si ça réussit
             if (depositDAO.update(existingData) == null) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;

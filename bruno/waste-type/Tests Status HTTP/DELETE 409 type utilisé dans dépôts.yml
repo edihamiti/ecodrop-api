@@ -2,15 +2,18 @@ info:
   name: DELETE 409 - type utilisé dans dépôts
   type: http
   seq: 12
+
 http:
   method: DELETE
   url: http://localhost:8080/ecodrop/waste-types/1
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
       value: "409"
+
 settings:
   encodeUrl: true
   timeout: 0
