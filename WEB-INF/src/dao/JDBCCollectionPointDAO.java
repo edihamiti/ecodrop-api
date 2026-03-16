@@ -78,7 +78,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO {
         if (cp == null) return null;
         try (Connection con = bdd.getConnection()) {
             // Correction : DELETE FROM (sans *)
-            PreparedStatement ps = con.prepareStatement("DELETE FROM collectionpoint WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET collected = TRUE WHERE pointId = ?");
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {

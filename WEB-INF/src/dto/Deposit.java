@@ -13,16 +13,19 @@ public class Deposit {
     private Double weight;
     private Date dateDepot;
 
+    private Boolean collected;
+
     public Deposit() {
     }
 
-    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight, Date dateDepot) {
+    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight, Date dateDepot, Boolean collected) {
         this.id = id;
         this.userId = userId;
         this.weight = weight;
         this.wasteType = wasteType;
         this.point = point;
         this.dateDepot = dateDepot;
+        this.collected = collected;
     }
 
     public int getId() {
@@ -70,6 +73,26 @@ public class Deposit {
 
     public void setDateDepot(Date dateDepot) {
         this.dateDepot = dateDepot;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Boolean getCollected() {
+        return collected;
+    }
+
+    public void setCollected(Boolean collected) {
+        this.collected = collected;
     }
 
     public String toString() {

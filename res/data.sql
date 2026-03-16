@@ -38,7 +38,7 @@ VALUES ('vert', 10),
 
 CREATE TABLE CollectionPoint
 (
-    id          SERIAL PRIMARY KEY,
+    id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     adresse     TEXT,
     capaciteMax INT
 );
@@ -155,7 +155,7 @@ VALUES (1, 1),
 
 CREATE TABLE Users
 (
-    id       SERIAL PRIMARY KEY,
+    id       INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     login    TEXT,
     password TEXT,
     role     TEXT
@@ -191,7 +191,8 @@ CREATE TABLE Deposit
     pointid     INT REFERENCES CollectionPoint (id),
     wasteTypeId INT REFERENCES WasteType (id),
     poids       INT,
-    dateDepot   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    dateDepot   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    collected   BOOLEAN DEFAULT FALSE
 );
 
 INSERT INTO Deposit(userid, pointid, wasteTypeId, poids)
