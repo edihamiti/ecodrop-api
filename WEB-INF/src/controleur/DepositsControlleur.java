@@ -67,6 +67,7 @@ public class DepositsControlleur extends PatchServlet {
         try {
             deposit = SerializationUtils.parseRequest(req, Deposit.class);
         } catch (IOException e) {
+            System.out.printf("[DEBUG] IOException: %s", e.getMessage());
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Corps de la requête invalide");
             return;
         }
@@ -81,6 +82,8 @@ public class DepositsControlleur extends PatchServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Le poids doit être un nombre positif");
             return;
         }
+
+        System.out.println("[DEBUG] Deposit: " + deposit);
 
         try {
             Deposit saved = depositDAO.save(deposit);

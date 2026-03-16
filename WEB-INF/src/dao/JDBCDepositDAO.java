@@ -17,7 +17,7 @@ public class JDBCDepositDAO implements DepositDAO {
         int userId = rs.getInt(2);
         CollectionPoint point = new CollectionPoint(rs.getInt(3), rs.getString(4), rs.getInt(5));
         WasteType wasteType = new WasteType(rs.getInt(6), rs.getString(7), rs.getInt(8));
-        return new Deposit(rs.getInt(1), userId, point, wasteType, rs.getDouble(9));
+        return new Deposit(rs.getInt(1), userId, point, wasteType, rs.getDouble(9), rs.getDate(10));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class JDBCDepositDAO implements DepositDAO {
     public List<Deposit> findAll(int limit, int offset) {
         List<Deposit> deposits = new ArrayList<>();
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids " +
+            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids, d.datedepot " +
                                                             "FROM Deposit d " +
                                                             "JOIN CollectionPoint cp ON d.pointid = cp.id " +
                                                             "JOIN WasteType wt ON d.wasteTypeId = wt.id " +
@@ -109,11 +109,12 @@ public class JDBCDepositDAO implements DepositDAO {
         }
 
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO deposit(userid, pointid, wasteTypeId, poids) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement("INSERT INTO deposit(userid, pointid, wasteTypeId, poids, datedepot) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, deposit.getUserId());
             ps.setInt(2, deposit.getPoint().getId());
             ps.setInt(3, deposit.getWasteType().id());
             ps.setDouble(4, deposit.getWeight());
+            ps.setDate(5, new Date(deposit.getDateDepot().getTime()));
             int affected = ps.executeUpdate();
             if (affected == 0) return null;
             ResultSet keys = ps.getGeneratedKeys();
@@ -147,7 +148,7 @@ public class JDBCDepositDAO implements DepositDAO {
     @Override
     public Deposit findById(int id) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids " +
+            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids, d.datedepot " +
                                                             "FROM Deposit d " +
                                                             "JOIN CollectionPoint cp ON d.pointid = cp.id " +
                                                             "JOIN WasteType wt ON d.wasteTypeId = wt.id " +

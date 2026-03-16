@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class SerializationUtils {
 
@@ -14,6 +16,8 @@ public class SerializationUtils {
     public static <T> T parseRequest(HttpServletRequest req, Class<T> clazz) throws IOException {
         String contentType = req.getContentType();
         ObjectMapper mapper = ContentMapperFactory.getMapper(contentType);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        mapper.setDateFormat(df);
 
         // Utiliser getInputStream() est plus robuste pour les flux binaires/XML
         return mapper.readValue(req.getInputStream(), clazz);
@@ -30,6 +34,9 @@ public class SerializationUtils {
         resp.setStatus(status);
 
         ObjectMapper mapper = ContentMapperFactory.getMapper(accept);
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        mapper.setDateFormat(df);
         resp.getWriter().println(mapper.writeValueAsString(data));
     }
 }

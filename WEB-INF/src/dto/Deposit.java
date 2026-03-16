@@ -11,18 +11,18 @@ public class Deposit {
 
     private WasteType wasteType;
     private double weight;
-    private Date date;
+    private Date dateDepot;
 
     public Deposit() {
     }
 
-    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight, Date date) {
+    public Deposit(int id, int userId, CollectionPoint point, WasteType wasteType, double weight, Date dateDepot) {
         this.id = id;
         this.userId = userId;
         this.weight = weight;
         this.wasteType = wasteType;
         this.point = point;
-        this.date = date;
+        this.dateDepot = dateDepot;
     }
 
     public int getId() {
@@ -64,11 +64,15 @@ public class Deposit {
         this.weight = weight;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateDepot() {
+        return dateDepot;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateDepot(Date dateDepot) {
+        this.dateDepot = dateDepot;
+    }
+
+    public String toString() {
+        return "Deposit{" + "id=" + id + ", userId=" + userId + ", wasteType=" + wasteType + ", weight=" + weight + ", dateDepot=" + dateDepot + '}';
     }
 }
