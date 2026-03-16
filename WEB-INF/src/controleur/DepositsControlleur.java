@@ -181,7 +181,14 @@ public class DepositsControlleur extends PatchServlet {
 
         putData.setId(id);
 
-        Deposit updated = depositDAO.update(putData);
+        Deposit updated;
+        try {
+
+            updated = depositDAO.update(putData);
+        } catch (NullPointerException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         if (updated == null) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;

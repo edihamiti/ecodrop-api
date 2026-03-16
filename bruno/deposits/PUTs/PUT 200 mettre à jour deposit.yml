@@ -18,7 +18,8 @@ http:
         "userId": 1,
         "point": { "id": 1 },
         "wasteType": { "id": 1 },
-        "weight": 100
+        "weight": 100,
+        "dateDepot": "2026-12-20"
       }
   auth: inherit
 
