@@ -79,17 +79,15 @@ public class JDBCDepositDAO implements DepositDAO {
     public boolean canAcceptDeposit(int pointId, double weight) {
         try (Connection con = bdd.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                "SELECT cp.capaciteMax, SUM(d.poids) AS totalWeight " +
-                "FROM CollectionPoint cp LEFT JOIN Deposit d ON d.pointid = cp.id " +
-                "WHERE cp.id = ? AND d.collected IS FALSE GROUP BY cp.capaciteMax"
+                "SELECT cp.capaciteMax, COALESCE(SUM(d.poids), 0) AS totalWeight " +
+                "FROM CollectionPoint cp LEFT JOIN Deposit d ON d.pointid = cp.id AND d.collected IS FALSE " +
+                "WHERE cp.id = ? GROUP BY cp.capaciteMax"
             );
             ps.setInt(1, pointId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int capaciteMax = rs.getInt(1);
                 double totalWeight = rs.getDouble(2);
-                // SUM retourne NULL s'il n'y a aucun dépôt, wasNull() permet de le détecter
-                if (rs.wasNull()) totalWeight = 0;
                 return (totalWeight + weight) <= capaciteMax;
             }
         } catch (SQLException e) {
