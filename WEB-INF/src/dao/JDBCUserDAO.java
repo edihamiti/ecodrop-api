@@ -3,12 +3,10 @@ package dao;
 import bdd.DS;
 import dto.LeaderBoardUser;
 import dto.User;
+import dto.WasteType;
 import utils.Config;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,16 +16,21 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User update(User user) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, password = ?, role = ? WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, password = ?, role = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getRole());   // Correction : était user.getPassword()
             ps.setInt(4, user.getId());
-            ps.executeUpdate();
+            int affected = ps.executeUpdate();
+            if (affected == 0) return null;
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            }
+            return null;
         } catch (SQLException e) {
             return null;
         }
-        return user;
     }
 
 
