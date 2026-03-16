@@ -115,7 +115,7 @@ public class OAuthClient {
      */
     private static UserInfo extractUserInfo(JsonNode json, OAuthProvider provider) {
         return switch (provider) {
-            case GOOGLE, SALESFORCE, ADOBE, YAHOO, PAYPAL, AUTH0, OKTA, KEYCLOAK ->
+            case GOOGLE, SALESFORCE, ADOBE, PAYPAL, AUTH0, OKTA, KEYCLOAK ->
                 new UserInfo(getField(json, "email"), getField(json, "name"));
 
             case DISCORD, GITLAB, GITLAB_COM, GITLAB_FRAMAGIT, GITLAB_SELF ->
@@ -124,33 +124,9 @@ public class OAuthClient {
             case GITHUB, GITEA ->
                 new UserInfo(getField(json, "email"), getField(json, "login"));
 
-            case FACEBOOK ->
-                new UserInfo(getField(json, "email"), getField(json, "name"));
-
-            case TWITTER -> {
-                JsonNode data = json.has("data") ? json.get("data") : json;
-                yield new UserInfo(null, getField(data, "username"));
-            }
-
             case LINKEDIN ->
                 new UserInfo(getField(json, "email"), getField(json, "name"));
 
-            case SPOTIFY, DEEZER ->
-                new UserInfo(getField(json, "email"), getField(json, "display_name"));
-
-            case BITBUCKET ->
-                new UserInfo(null, getField(json, "username"));
-
-            case STRIPE ->
-                new UserInfo(getField(json, "email"), getField(json, "display_name"));
-
-            case TIKTOK -> {
-                JsonNode data = json.has("data") && json.get("data").has("user") ? json.get("data").get("user") : json;
-                yield new UserInfo(null, getField(data, "display_name"));
-            }
-
-            case PINTEREST ->
-                new UserInfo(null, getField(json, "username"));
 
             case SNAPCHAT -> {
                 JsonNode me = json.has("me") ? json.get("me") : json;

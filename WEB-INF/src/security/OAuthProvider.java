@@ -43,77 +43,13 @@ public enum OAuthProvider {
            "https://api.github.com/user",
            "user:email"),
 
-    FACEBOOK("facebook",
-             "Facebook",
-             "bi-facebook", "#1877f2",
-             "https://www.facebook.com/v19.0/dialog/oauth",
-             "https://graph.facebook.com/v19.0/oauth/access_token",
-             "https://graph.facebook.com/me?fields=id,name,email",
-             "email public_profile"),
-
-    TWITTER("twitter",
-            "X (Twitter)",
-            "bi-twitter-x", "#000000",
-            "https://twitter.com/i/oauth2/authorize",
-            "https://api.twitter.com/2/oauth2/token",
-            "https://api.twitter.com/2/users/me?user.fields=name,username,profile_image_url",
-            "users.read tweet.read offline.access"), // fait, à tester
-
     LINKEDIN("linkedin",
              "LinkedIn",
              "bi-linkedin", "#0a66c2",
              "https://www.linkedin.com/oauth/v2/authorization",
              "https://www.linkedin.com/oauth/v2/accessToken",
              "https://api.linkedin.com/v2/userinfo",
-             "openid profile email"), // fonctionnel
-
-    SPOTIFY("spotify",
-            "Spotify",
-            "bi-spotify", "#1db954",
-            "https://accounts.spotify.com/authorize",
-            "https://accounts.spotify.com/api/token",
-            "https://api.spotify.com/v1/me",
-            "user-read-email user-read-private"), // pas fonctionnel pcq le redirect uri *doit* utiliser 127.0.0.1 au lieu de localhost et j'ai la flemme de changer comment tout le systeme fonctionne pour lui
-
-    BITBUCKET("bitbucket",
-              "Bitbucket",
-              "bi-git", "#0052cc",
-              "https://bitbucket.org/site/oauth2/authorize",
-              "https://bitbucket.org/site/oauth2/access_token",
-              "https://api.bitbucket.org/2.0/user",
-              "account email"), // je comprends pas pourquoi ça fonctionne
-
-    PAYPAL("paypal",
-           "PayPal",
-           "bi-paypal", "#003087",
-           "https://www.paypal.com/signin/authorize",
-           "https://api.paypal.com/v1/oauth2/token",
-           "https://api.paypal.com/v1/identity/openidconnect/userinfo?schema=openid",
-           "openid email profile"),
-
-    STRIPE("stripe",
-           "Stripe",
-           "bi-stripe", "#635bff",
-           "https://connect.stripe.com/oauth/authorize",
-           "https://connect.stripe.com/oauth/token",
-           "https://api.stripe.com/v1/account",
-           "read_only"),
-
-    TIKTOK("tiktok",
-           "TikTok",
-           "bi-tiktok", "#000000",
-           "https://www.tiktok.com/v2/auth/authorize/",
-           "https://open.tiktokapis.com/v2/oauth/token/",
-           "https://open.tiktokapis.com/v2/user/info/",
-           "user.info.basic"),
-
-    PINTEREST("pinterest",
-              "Pinterest",
-              "bi-pinterest", "#bd081c",
-              "https://www.pinterest.com/oauth/",
-              "https://api.pinterest.com/v5/oauth/token",
-              "https://api.pinterest.com/v5/user_account",
-              "user_accounts:read"),
+             "openid profile email"),
 
     SNAPCHAT("snapchat",
              "Snapchat",
@@ -314,14 +250,6 @@ public enum OAuthProvider {
                 "https://api.dailymotion.com/oauth/token",
                 "https://api.dailymotion.com/me?fields=id,screenname,email",
                 "email userinfo"),
-
-    DEEZER("deezer",
-           "Deezer",
-           "bi-music-note-beamed", "#feaa2d",
-           "https://connect.deezer.com/oauth/auth.php",
-           "https://connect.deezer.com/oauth/access_token.php",
-           "https://api.deezer.com/user/me",
-           "basic_access email"),
 
     MEETUP("meetup",
            "Meetup",
