@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCCollectionPointDAO implements CollectionPointDAO {
+public class JDBCCollectionPointDAO implements CollectionPointDAO{
     private static Database bdd = new Database();
 
     @Override
