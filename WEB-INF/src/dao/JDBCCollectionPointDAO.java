@@ -5,6 +5,7 @@ import dto.CollectionPoint;
 import dto.CollectionPointStatus;
 import dto.CollectionPointWithWasteTypes;
 import dto.WasteType;
+import utils.Config;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
 
     @Override
     public List<CollectionPoint> findAll() {
-        return findAll(DEFAULT_LIMIT, DEFAULT_OFFSET);
+        return findAll(Integer.parseInt(Config.get("default_limit")), Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
 
     @Override
     public List<CollectionPoint> findAll(int limit) {
-        return findAll(limit, DEFAULT_OFFSET);
+        return findAll(limit, Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.CollectionPoint;
 import dto.Deposit;
 import dto.WasteType;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCDepositDAO implements DepositDAO {
-    private static DS bdd = new DS();
+    private static Database bdd = new Database();
     public static final int DEFAULT_LIMIT = 20;
     public static final int DEFAULT_OFFSET = 0;
     private Deposit mapRow(ResultSet rs) throws SQLException {

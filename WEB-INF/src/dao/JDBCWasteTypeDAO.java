@@ -2,6 +2,7 @@ package dao;
 
 import db.Database;
 import dto.WasteType;
+import utils.Config;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,12 +45,12 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
 
     @Override
     public List<WasteType> findAll() {
-        return findAll(DEFAULT_LIMIT, DEFAULT_OFFSET);
+        return findAll(Integer.parseInt(Config.get("default_limit")), Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override
     public List<WasteType> findAll(int limit) {
-        return findAll(limit, DEFAULT_OFFSET);
+        return findAll(limit, Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override

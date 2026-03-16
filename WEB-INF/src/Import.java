@@ -1,4 +1,4 @@
-import bdd.DS;
+import db.Database;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
@@ -7,7 +7,7 @@ import java.sql.Connection;
 
 public class Import {
     public static void main(String[] args) {
-        DS bdd = new DS();
+        Database bdd = new Database();
         try (Connection con = bdd.getConnection();
              InputStream csv = Import.class.getClassLoader().getResourceAsStream("Data.csv")) {
 

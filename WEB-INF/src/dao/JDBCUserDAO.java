@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.LeaderBoardUser;
 import dto.User;
 import dto.WasteType;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class JDBCUserDAO implements UserDAO {
-    private static final DS bdd = new DS();
+    private static final Database bdd = new Database();
 
     @Override
     public User update(User user) {
