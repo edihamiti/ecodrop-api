@@ -1,10 +1,11 @@
 info:
-  name: PUT 400 - corps invalide user
+  name: PUT 400 - sans ID user
   type: http
-  seq: 10
+  seq: 3
+
 http:
   method: PUT
-  url: http://localhost:8080/ecodrop/users/1
+  url: http://localhost:8080/ecodrop/users/
   headers:
     - name: Accept
       value: application/json
@@ -14,14 +15,18 @@ http:
     type: json
     data: |-
       {
-        "login": "seulementLogin"
+        "login": "test",
+        "password": "test",
+        "role": "USER"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
       value: "400"
+
 settings:
   encodeUrl: true
   timeout: 0

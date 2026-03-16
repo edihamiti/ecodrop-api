@@ -1,10 +1,11 @@
 info:
-  name: PUT 404 - ID inexistant user
+  name: PATCH 400 - corps invalide
   type: http
-  seq: 13
+  seq: 1
+
 http:
-  method: PUT
-  url: http://localhost:8080/ecodrop/users/99999
+  method: PATCH
+  url: http://localhost:8080/ecodrop/users/1
   headers:
     - name: Accept
       value: application/json
@@ -14,16 +15,16 @@ http:
     type: json
     data: |-
       {
-        "login": "fantome",
-        "password": "fantome_mdp",
-        "role": "USER"
+        "id": "invalide"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "404"
+      value: "400"
+
 settings:
   encodeUrl: true
   timeout: 0

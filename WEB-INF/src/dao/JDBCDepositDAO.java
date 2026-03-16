@@ -81,7 +81,7 @@ public class JDBCDepositDAO implements DepositDAO {
             PreparedStatement ps = con.prepareStatement(
                 "SELECT cp.capaciteMax, SUM(d.poids) AS totalWeight " +
                 "FROM CollectionPoint cp LEFT JOIN Deposit d ON d.pointid = cp.id " +
-                "WHERE cp.id = ? AND d.collected = FALSE GROUP BY cp.capaciteMax"
+                "WHERE cp.id = ? AND d.collected IS FALSE GROUP BY cp.capaciteMax"
             );
             ps.setInt(1, pointId);
             ResultSet rs = ps.executeQuery();

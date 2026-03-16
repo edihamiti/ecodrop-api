@@ -1,9 +1,10 @@
 info:
-  name: PUT 400 - ID non valide user
+  name: PATCH 400 - ID non valide
   type: http
-  seq: 11
+  seq: 1
+
 http:
-  method: PUT
+  method: PATCH
   url: http://localhost:8080/ecodrop/users/abc
   headers:
     - name: Accept
@@ -14,16 +15,16 @@ http:
     type: json
     data: |-
       {
-        "login": "test",
-        "password": "test",
-        "role": "USER"
+        "login": "nouveauLogin"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
       value: "400"
+
 settings:
   encodeUrl: true
   timeout: 0

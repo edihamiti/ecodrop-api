@@ -1,7 +1,7 @@
 info:
-  name: PATCH 400 - corps invalide
+  name: PATCH 200 - mettre à jour user
   type: http
-  seq: 7
+  seq: 1
 
 http:
   method: PATCH
@@ -15,7 +15,7 @@ http:
     type: json
     data: |-
       {
-        "id": "invalide"
+        "login": "nouveauLogin"
       }
   auth: inherit
 
@@ -23,11 +23,10 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "400"
+      value: "200"
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

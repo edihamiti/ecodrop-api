@@ -1,7 +1,7 @@
 info:
   name: PATCH 400 - sans ID
   type: http
-  seq: 5
+  seq: 1
 
 http:
   method: PATCH
@@ -30,4 +30,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

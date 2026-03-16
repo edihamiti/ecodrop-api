@@ -73,21 +73,6 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO {
     }
 
     @Override
-    public CollectionPoint delete(int id) {
-        CollectionPoint cp = findById(id);
-        if (cp == null) return null;
-        try (Connection con = bdd.getConnection()) {
-            // Correction : DELETE FROM (sans *)
-            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET collected = TRUE WHERE pointId = ?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            return null;
-        }
-        return cp;
-    }
-
-    @Override
     public CollectionPointWithWasteTypes findByIdWithWasteTypes(int id) {
         CollectionPoint cp = findById(id);
         if (cp == null) return null;
@@ -160,7 +145,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO {
     @Override
     public boolean clearDeposits(int pointId) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM Deposit WHERE pointid = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE deposit SET collected = TRUE WHERE pointId = ?");
             ps.setInt(1, pointId);
             ps.executeUpdate();
             return true;

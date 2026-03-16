@@ -1,11 +1,11 @@
 info:
-  name: PATCH 404 - ID inexistant
+  name: PUT 200 - mettre à jour user
   type: http
-  seq: 8
+  seq: 1
 
 http:
-  method: PATCH
-  url: http://localhost:8080/ecodrop/users/99999
+  method: PUT
+  url: http://localhost:8080/ecodrop/users/1
   headers:
     - name: Accept
       value: application/json
@@ -15,7 +15,9 @@ http:
     type: json
     data: |-
       {
-        "login": "nouveauLogin"
+        "login": "enzo_updated",
+        "password": "nouveau_mdp",
+        "role": "USER"
       }
   auth: inherit
 
@@ -23,11 +25,10 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "404"
+      value: "200"
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

@@ -1,14 +1,22 @@
 info:
-  name: GET 400 - chemin non valide
+  name: PUT 400 - corps invalide user
   type: http
-  seq: 3
+  seq: 4
 
 http:
-  method: GET
-  url: http://localhost:8080/ecodrop/users/abc
+  method: PUT
+  url: http://localhost:8080/ecodrop/users/1
   headers:
     - name: Accept
       value: application/json
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "login": "seulementLogin"
+      }
   auth: inherit
 
 runtime:
@@ -22,4 +30,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

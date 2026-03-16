@@ -1,11 +1,11 @@
 info:
-  name: PATCH 400 - ID non valide
+  name: PATCH 404 - ID inexistant
   type: http
-  seq: 6
+  seq: 1
 
 http:
   method: PATCH
-  url: http://localhost:8080/ecodrop/users/abc
+  url: http://localhost:8080/ecodrop/users/99999
   headers:
     - name: Accept
       value: application/json
@@ -23,11 +23,10 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "400"
+      value: "404"
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-

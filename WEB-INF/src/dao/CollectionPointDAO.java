@@ -13,7 +13,6 @@ public interface CollectionPointDAO {
     List<CollectionPoint> findAll(int limit, int offset);
     List<CollectionPoint> findAll(int limit);
     CollectionPoint update(CollectionPoint collectionPoint);
-    CollectionPoint delete(int id);
 
     /** Retourne un point avec la liste imbriquée des WasteTypes acceptés */
     CollectionPointWithWasteTypes findByIdWithWasteTypes(int id);

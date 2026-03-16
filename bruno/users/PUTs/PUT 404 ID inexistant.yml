@@ -1,10 +1,11 @@
 info:
-  name: PUT 200 - mettre à jour user
+  name: PUT 404 - ID inexistant user
   type: http
-  seq: 9
+  seq: 5
+
 http:
   method: PUT
-  url: http://localhost:8080/ecodrop/users/1
+  url: http://localhost:8080/ecodrop/users/99999
   headers:
     - name: Accept
       value: application/json
@@ -14,16 +15,18 @@ http:
     type: json
     data: |-
       {
-        "login": "enzo_updated",
-        "password": "nouveau_mdp",
+        "login": "fantome",
+        "password": "fantome_mdp",
         "role": "USER"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "200"
+      value: "404"
+
 settings:
   encodeUrl: true
   timeout: 0

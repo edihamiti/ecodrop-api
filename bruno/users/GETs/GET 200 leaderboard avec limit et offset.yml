@@ -1,22 +1,14 @@
 info:
-  name: PATCH 200 - mettre à jour user
+  name: GET 200 - leaderboard avec limit et offset
   type: http
-  seq: 4
+  seq: 1
 
 http:
-  method: PATCH
-  url: http://localhost:8080/ecodrop/users/1
+  method: GET
+  url: http://localhost:8080/ecodrop/users/leaderboard?limit=5&offset=0
   headers:
     - name: Accept
       value: application/json
-    - name: Content-Type
-      value: application/json
-  body:
-    type: json
-    data: |-
-      {
-        "login": "nouveauLogin"
-      }
   auth: inherit
 
 runtime:
@@ -30,4 +22,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-
