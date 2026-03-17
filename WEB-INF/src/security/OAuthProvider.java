@@ -1,5 +1,6 @@
 package security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import utils.Config;
 
 import java.net.URLEncoder;
@@ -96,11 +97,21 @@ public enum OAuthProvider {
     }
 
     /**
+     * Construit l'URI de redirection pour ce provider.
+     */
+    public static String getRedirectUri(HttpServletRequest request, String providerName) {
+        int port = request.getServerPort();
+        String domain = request.getScheme() + "://" + request.getServerName()
+                + ((port == 80 || port == 443) ? "" : ":" + port);
+        return URLEncoder.encode((domain.startsWith("http")? domain + "/ecodrop" : domain) + Config.get("redirect_uri"), StandardCharsets.UTF_8) + "?from=" + providerName;
+    }
+
+    /**
      * Construit l'URL complète d'autorisation OAuth pour ce provider.
      * @return l'URL prête à être utilisée dans un lien href
      */
-    public String buildAuthorizeUrl() {
-        String redirectUri = URLEncoder.encode(Config.get("redirect_uri"), StandardCharsets.UTF_8) + "%3Ffrom%3D" + name;
+    public String buildAuthorizeUrl(HttpServletRequest request) {
+        String redirectUri = getRedirectUri(request, name);
 
         return authorizeUrl
                 + "?client_id=" + Config.get(name + ".client_id")

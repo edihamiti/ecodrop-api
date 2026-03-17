@@ -18,7 +18,7 @@
         <p class="subtitle">Connectez-vous à votre espace EcoDrop</p>
 
         <% for (OAuthProvider p : OAuthProvider.values()) { %>
-            <a href="<%= p.buildAuthorizeUrl() %>" class="btn-oauth">
+            <a href="<%= p.buildAuthorizeUrl(request) %>" class="btn-oauth">
                 <i class="bi <%= p.getIcon() %>" style="color: <%= p.getColor() %>"></i>
                 Continuer avec <%= p.getDisplayName() %>
             </a>

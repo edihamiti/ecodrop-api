@@ -3,10 +3,11 @@ package utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.UserInfo;
+import jakarta.servlet.http.HttpServletRequest;
 import security.OAuthProvider;
 
-import javax.swing.*;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -28,16 +29,22 @@ public class OAuthClient {
     /**
      * Échange un code d'autorisation contre un access token auprès du provider.
      *
+     * @param request  la requête HTTP en cours
      * @param code     le code d'autorisation reçu du callback OAuth
      * @param provider le provider OAuth
      * @return l'access token du provider
      * @throws Exception si l'échange échoue
      */
-    public static String exchangeCode(String code, OAuthProvider provider) throws Exception {
+    public static String exchangeCode(HttpServletRequest request, String code, OAuthProvider provider) throws Exception {
+        // On récupère l'URI de redirection (déjà partiellement encodée par getRedirectUri)
+        // Mais comme on l'insère dans une Map qui sera encodée globalement ensuite, 
+        // on la décode pour éviter un double encodage.
+        String redirectUri = URLDecoder.decode(OAuthProvider.getRedirectUri(request, provider.getName()), StandardCharsets.UTF_8);
+
         Map<String, String> params = Map.of(
                 "grant_type", "authorization_code",
                 "code", code,
-                "redirect_uri", Config.get("redirect_uri") + "?from=" + provider.getName(),
+                "redirect_uri", redirectUri,
                 "client_id", Config.get(provider.getName() + ".client_id"),
                 "client_secret", Config.get(provider.getName() + ".client_secret")
         );
@@ -47,14 +54,14 @@ public class OAuthClient {
                         + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
                 .collect(Collectors.joining("&"));
 
-        HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(provider.getTokenUrl()))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Accept", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
-        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new RuntimeException("Erreur OAuth (" + response.statusCode() + ") : " + response.body());
@@ -83,13 +90,13 @@ public class OAuthClient {
             throw new IllegalArgumentException("Access token null ou vide pour " + provider.getName());
         }
 
-        HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(provider.getUserInfoUrl()))
                 .header("Authorization", "Bearer " + accessToken)
                 .GET()
                 .build();
 
-        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new RuntimeException("Erreur UserInfo (" + response.statusCode() + ") : " + response.body());

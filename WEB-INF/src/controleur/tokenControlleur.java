@@ -38,7 +38,7 @@ public class tokenControlleur extends HttpServlet {
             OAuthProvider provider = OAuthProvider.fromName(from);
 
             // 2. Échange du code d'autorisation contre un access token
-            String accessToken = OAuthClient.exchangeCode(code, provider);
+            String accessToken = OAuthClient.exchangeCode(req, code, provider);
 
             // 3. Récupération des informations utilisateur (normalisées)
             UserInfo userInfo = OAuthClient.getUserInfo(accessToken, provider);
