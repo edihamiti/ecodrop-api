@@ -1,5 +1,8 @@
 package utils;
 
+import dao.JDBCUserDAO;
+import dao.UserDAO;
+import dto.User;
 import dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,6 +19,7 @@ public class JwtUtils {
     private static final String PREFIX = "Bearer ";
     private static final long EXPIRATION_MS = 3_600_000; // 1 heure en millisecondes
     private static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private  static final UserDAO userDAO = new JDBCUserDAO();
 
     public static String extractToken(String authHeader) {
         if (authHeader != null && authHeader.startsWith(PREFIX)) {
@@ -44,10 +48,17 @@ public class JwtUtils {
      * @return le token JWT signé
      */
     public static String createToken(UserInfo userInfo) {
+        String login = userInfo.email();
+        User user = userDAO.findByLogin(login);
+        if (user == null){
+            user = userDAO.save(login);
+        }
         return Jwts.builder()
                 .subject(userInfo.email())
-                .claim("email", userInfo.email())
+                .claim("id", user.getId())
+                .claim("email", login)
                 .claim("pseudo", userInfo.pseudo())
+                .claim("role", user.getRole())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(KEY)

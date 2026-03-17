@@ -83,7 +83,7 @@ public class UserControlleur extends PatchServlet {
             return;
         }
 
-        if (putData == null || putData.getLogin() == null || putData.getPassword() == null) {
+        if (putData == null || putData.getLogin() == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Champs login et password obligatoires");
             return;
         }
