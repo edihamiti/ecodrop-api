@@ -16,9 +16,9 @@ public class SecurityFilter implements Filter {
 
     // On définit les routes qui ne demandent PAS de token
     private static final List<String> PUBLIC_URLS = Arrays.asList(
-            "/login",
             "/index.jsp",
-            "/auth/token"
+            "/auth/token",
+            "/res/style.css"
     );
 
     @Override
