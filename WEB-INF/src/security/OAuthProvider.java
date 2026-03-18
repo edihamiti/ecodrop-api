@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public enum OAuthProvider {
 
     GITLAB("gitlab",
-            "GitLab",
+            "GitLab de l'université",
             "bi-gitlab", "#fc6d26",
             "https://gitlab.univ-lille.fr/oauth/authorize",
             "https://gitlab.univ-lille.fr/oauth/token",
