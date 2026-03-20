@@ -20,7 +20,7 @@ import java.util.Date;
 public class JwtUtils {
     private static final String SECRET = Config.get("api.client_secret");
     private static final String PREFIX = "Bearer ";
-    private static final long EXPIRATION_MS = 2_592_000_000L; // 1 mois (30 jours) en millisecondes (Pour que bruno fonctionne le jour du rendu)
+    private static final long EXPIRATION_MS = 2_592_000_000L * 12; // 1 an en millisecondes (Pour que bruno fonctionne le jour du rendu)
     private static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     private  static final UserDAO userDAO = new JDBCUserDAO();
 
