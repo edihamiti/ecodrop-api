@@ -157,7 +157,7 @@ CREATE TABLE Users
 (
     id       INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     login    TEXT UNIQUE,
-    role     TEXT DEFAULT 'USER'
+    role     TEXT NOT NULL DEFAULT 'USER'
 );
 
 INSERT INTO Users(login, role)
@@ -180,7 +180,10 @@ VALUES ('enzo', 'USER'),
        ('leo', 'ADMIN'),
        ('emma', 'ADMIN'),
        ('oliver', 'ADMIN'),
-       ('ava', 'ADMIN');
+       ('ava', 'ADMIN'),
+        ('jonas.facon.etu@univ-lille.fr', 'ADMIN'),
+       ('edi.hamiti.etu@univ-lille.fr', 'ADMIN'),
+       ('philippe.mathieu@univ-lille.fr', 'ADMIN');
 
 
 CREATE TABLE Deposit

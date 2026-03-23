@@ -1,3 +1,9 @@
+# Les ADMINs
+
+- Philipe MAthieu
+- Edi Hamiti
+- Jonas Facon
+
 # Documentation de l'API Ecodrop
 
 Ce document fournit la documentation de l'API REST pour le projet Ecodrop.
