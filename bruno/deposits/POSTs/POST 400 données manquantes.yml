@@ -7,6 +7,8 @@ http:
   method: POST
   url: http://localhost:8080/ecodrop/deposits/
   headers:
+    - name: Authorization
+      value: Bearer {{userToken}}
     - name: Accept
       value: application/json
     - name: Content-Type

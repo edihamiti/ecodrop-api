@@ -32,6 +32,9 @@ public class SecurityFilter implements Filter {
         String servletPath = req.getServletPath();
         String pathInfo = req.getPathInfo();
         String path = servletPath + (pathInfo == null ? "" : pathInfo);
+        if (path.length() > 1 && path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
         String method = req.getMethod();
 
         // 1. Accès Public : Tous les endpoints en GET sont publics ne nécessitent aucune protection (consultation libre)

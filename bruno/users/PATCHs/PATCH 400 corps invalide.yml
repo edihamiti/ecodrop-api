@@ -7,6 +7,8 @@ http:
   method: PATCH
   url: http://localhost:8080/ecodrop/users/1
   headers:
+    - name: Authorization
+      value: Bearer {{adminToken}}
     - name: Accept
       value: application/json
     - name: Content-Type

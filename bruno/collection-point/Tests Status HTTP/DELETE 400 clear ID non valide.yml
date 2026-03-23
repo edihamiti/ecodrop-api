@@ -6,6 +6,8 @@ http:
   method: DELETE
   url: http://localhost:8080/ecodrop/points/abc/clear
   headers:
+    - name: Authorization
+      value: Bearer {{adminToken}}
     - name: Accept
       value: application/json
   auth: inherit

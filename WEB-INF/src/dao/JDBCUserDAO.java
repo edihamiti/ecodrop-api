@@ -16,14 +16,15 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User update(User user) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, role = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, user.getRole());
-            ps.setString(2, user.getLogin());
+            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, role = ? WHERE id = ?");
+            ps.setString(1, user.getLogin());
+            ps.setString(2, user.getRole());
+            ps.setInt(3, user.getId());
             int affected = ps.executeUpdate();
             if (affected == 0) return null;
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(2));
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
             }
             return null;
         } catch (SQLException e) {
@@ -95,7 +96,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User save(String login) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Users(login) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Users(login, role) VALUES (?, 'USER')", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, login);
             int affected = ps.executeUpdate();
             if (affected == 0) return null;

@@ -1,10 +1,10 @@
 info:
-  name: DELETE 404 - clear ID inexistant
+  name: GET overloaded - NO TOKEN 401
   type: http
-  seq: 14
+  seq: 2
 http:
-  method: DELETE
-  url: http://localhost:8080/ecodrop/points/99999/clear
+  method: GET
+  url: http://localhost:8080/ecodrop/points/overloaded
   headers:
     - name: Authorization
       value: Bearer {{adminToken}}
@@ -15,9 +15,4 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "404"
-settings:
-  encodeUrl: true
-  timeout: 0
-  followRedirects: true
-  maxRedirects: 5
+      value: "401"

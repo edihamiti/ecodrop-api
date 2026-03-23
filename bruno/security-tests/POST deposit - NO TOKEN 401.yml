@@ -1,13 +1,13 @@
 info:
-  name: PUT 400 - champs manquants collection-point
+  name: POST deposit - NO TOKEN 401
   type: http
-  seq: 10
+  seq: 5
 http:
-  method: PUT
-  url: http://localhost:8080/ecodrop/points/1
+  method: POST
+  url: http://localhost:8080/ecodrop/deposits/
   headers:
     - name: Authorization
-      value: Bearer {{adminToken}}
+      value: Bearer {{userToken}}
     - name: Accept
       value: application/json
     - name: Content-Type
@@ -16,16 +16,15 @@ http:
     type: json
     data: |-
       {
-        "adresse": "Rue sans capacité"
+        "userId": 1,
+        "point": { "id": 1 },
+        "wasteType": { "id": 1 },
+        "weight": 1,
+        "dateDepot": "2026-03-16"
       }
   auth: inherit
 runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "400"
-settings:
-  encodeUrl: true
-  timeout: 0
-  followRedirects: true
-  maxRedirects: 5
+      value: "401"

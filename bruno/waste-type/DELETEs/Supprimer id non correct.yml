@@ -6,6 +6,9 @@ info:
 http:
   method: DELETE
   url: http://localhost:8080/ecodrop/waste-types/fds
+  headers:
+    - name: Authorization
+      value: Bearer {{adminToken}}
   auth: inherit
 
 settings:

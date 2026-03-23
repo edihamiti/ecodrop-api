@@ -6,6 +6,8 @@ http:
   method: PUT
   url: http://localhost:8080/ecodrop/points/99999
   headers:
+    - name: Authorization
+      value: Bearer {{adminToken}}
     - name: Accept
       value: application/json
     - name: Content-Type
