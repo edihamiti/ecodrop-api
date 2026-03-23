@@ -243,3 +243,5 @@ L'endpoint `/points` est utilisé pour gérer les points de collecte.
 * **Réponses d'erreur :**
     * **Code :** `404 Not Found` si le point de collecte n'existe pas.
     * **Code :** `400 Bad Request` si le corps de la requête est malformé.
+ 
+copyright Enzo Dewaele
