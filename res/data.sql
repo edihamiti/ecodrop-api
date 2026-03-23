@@ -156,32 +156,31 @@ VALUES (1, 1),
 CREATE TABLE Users
 (
     id       INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    login    TEXT,
-    password TEXT,
-    role     TEXT
+    login    TEXT UNIQUE,
+    role     TEXT DEFAULT 'USER'
 );
 
-INSERT INTO Users(login, password, role)
-VALUES ('enzo', 'enzo le zozo', 'USER'),
-       ('alice', 'alice le zozo', 'USER'),
-       ('bob', 'bob le zozo', 'USER'),
-       ('charlie', 'charlie le zozo', 'USER'),
-       ('dave', 'dave le zozo', 'USER'),
-       ('eve', 'eve le zozo', 'USER'),
-       ('frank', 'frank le zozo', 'USER'),
-       ('grace', 'grace le zozo', 'USER'),
-       ('heidi', 'heidi le zozo', 'USER'),
-       ('ivan', 'ivan le zozo', 'USER'),
-       ('ADMIN', 'ADMIN', 'ADMIN'),
-       ('jonas', 'jonas le goat', 'ADMIN'),
-       ('lucas', 'lucas le goat', 'ADMIN'),
-       ('maria', 'maria la goat', 'ADMIN'),
-       ('edi', 'edi le goat', 'ADMIN'),
-       ('nina', 'nina la goat', 'ADMIN'),
-       ('leo', 'leo le goat', 'ADMIN'),
-       ('emma', 'emma la goat', 'ADMIN'),
-       ('oliver', 'oliver le goat', 'ADMIN'),
-       ('ava', 'ava la goat', 'ADMIN');
+INSERT INTO Users(login, role)
+VALUES ('enzo', 'USER'),
+       ('alice', 'USER'),
+       ('bob', 'USER'),
+       ('charlie', 'USER'),
+       ('dave', 'USER'),
+       ('eve', 'USER'),
+       ('frank', 'USER'),
+       ('grace', 'USER'),
+       ('heidi', 'USER'),
+       ('ivan', 'USER'),
+       ('ADMIN', 'ADMIN'),
+       ('jonas', 'ADMIN'),
+       ('lucas', 'ADMIN'),
+       ('maria', 'ADMIN'),
+       ('edi', 'ADMIN'),
+       ('nina', 'ADMIN'),
+       ('leo', 'ADMIN'),
+       ('emma', 'ADMIN'),
+       ('oliver', 'ADMIN'),
+       ('ava', 'ADMIN');
 
 
 CREATE TABLE Deposit

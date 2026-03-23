@@ -1,19 +1,18 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.CollectionPoint;
 import dto.CollectionPointStatus;
 import dto.CollectionPointWithWasteTypes;
 import dto.WasteType;
+import utils.Config;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCCollectionPointDAO implements CollectionPointDAO {
-    private static DS bdd = new DS();
-    public static final int DEFAULT_LIMIT = 20;
-    public static final int DEFAULT_OFFSET = 0;
+public class JDBCCollectionPointDAO implements CollectionPointDAO{
+    private static Database bdd = new Database();
 
     @Override
     public CollectionPoint findById(int id) {
@@ -32,7 +31,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO {
 
     @Override
     public List<CollectionPoint> findAll() {
-        return findAll(DEFAULT_LIMIT, DEFAULT_OFFSET);
+        return findAll(Integer.parseInt(Config.get("default_limit")), Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override
@@ -54,7 +53,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO {
 
     @Override
     public List<CollectionPoint> findAll(int limit) {
-        return findAll(limit, DEFAULT_OFFSET);
+        return findAll(limit, Integer.parseInt(Config.get("default_offset")));
     }
 
     @Override

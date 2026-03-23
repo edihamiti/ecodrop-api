@@ -1,6 +1,6 @@
 package dao;
 
-import bdd.DS;
+import db.Database;
 import dto.LeaderBoardUser;
 import dto.User;
 import dto.WasteType;
@@ -11,21 +11,19 @@ import java.util.Collection;
 import java.util.List;
 
 public class JDBCUserDAO implements UserDAO {
-    private static final DS bdd = new DS();
+    private static final Database bdd = new Database();
 
     @Override
     public User update(User user) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, password = ?, role = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, user.getLogin());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getRole());   // Correction : était user.getPassword()
-            ps.setInt(4, user.getId());
+            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, role = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getRole());
+            ps.setString(2, user.getLogin());
             int affected = ps.executeUpdate();
             if (affected == 0) return null;
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(2));
             }
             return null;
         } catch (SQLException e) {
@@ -71,11 +69,44 @@ public class JDBCUserDAO implements UserDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
             }
         } catch (SQLException e) {
             return null;
         }
         return null;
     }
+
+    @Override
+    public User findByLogin(String login) {
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE login = ?");
+            ps.setString(1, login);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public User save(String login) {
+        try (Connection con = bdd.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Users(login) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, login);
+            int affected = ps.executeUpdate();
+            if (affected == 0) return null;
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(2));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
+    }
+
 }

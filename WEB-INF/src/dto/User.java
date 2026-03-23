@@ -4,32 +4,22 @@ package dto;
 public class User {
     private Integer id;
     private String login;
-    private String password;
     private String role;
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public User() {
     }
 
-    public User(Integer id, String login, String password, String role) {
+    public User(Integer id, String login, String role) {
          this.id = id;
          this.login = login;
-         this.password = password;
          this.role = role;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getId(){
+        return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -41,11 +31,11 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
