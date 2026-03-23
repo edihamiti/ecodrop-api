@@ -18,7 +18,6 @@ http:
     data: |-
       {
         "login": "enzo_updated",
-        "password": "nouveau_mdp",
         "role": "USER"
       }
   auth: inherit

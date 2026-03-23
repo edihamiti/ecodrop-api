@@ -83,8 +83,8 @@ public class UserControlleur extends PatchServlet {
             return;
         }
 
-        if (putData == null || putData.getLogin() == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Champs login et password obligatoires");
+        if (putData == null || putData.getLogin() == null || putData.getRole() == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Champs login et role obligatoires");
             return;
         }
 
@@ -133,11 +133,12 @@ public class UserControlleur extends PatchServlet {
         }
 
         MergeUtils.merge(existingRecord, patchData);
-        // Correction du bug : 500 si update échoue (null), pas si ça réussit
-        if (usersDAO.update(existingRecord) == null) {
+
+        User updated = usersDAO.update(existingRecord);
+        if (updated == null) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        SerializationUtils.sendResponse(resp, req, existingRecord, HttpServletResponse.SC_OK);
+        SerializationUtils.sendResponse(resp, req, updated, HttpServletResponse.SC_OK);
     }
 }

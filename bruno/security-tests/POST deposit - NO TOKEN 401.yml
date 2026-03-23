@@ -2,12 +2,11 @@ info:
   name: POST deposit - NO TOKEN 401
   type: http
   seq: 5
+
 http:
   method: POST
   url: http://localhost:8080/ecodrop/deposits/
   headers:
-    - name: Authorization
-      value: Bearer {{userToken}}
     - name: Accept
       value: application/json
     - name: Content-Type
@@ -23,8 +22,15 @@ http:
         "dateDepot": "2026-03-16"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
       value: "401"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -35,6 +35,7 @@ public class SecurityFilter implements Filter {
         if (path.length() > 1 && path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
+        
         String method = req.getMethod();
 
         // 1. Accès Public : Tous les endpoints en GET sont publics ne nécessitent aucune protection (consultation libre)
@@ -44,14 +45,20 @@ public class SecurityFilter implements Filter {
             return;
         }
 
-        // 2. Accès Protégé (Token) : Toutes les opérations de modification (POST, PUT, PATCH, DELETE)
-        // ainsi que GET /points/overloaded nécessitent obligatoirement la présence du token valide
+        // 2. Accès Protégé (Token)
         String authHeader = req.getHeader("Authorization");
         String token = JwtUtils.extractToken(authHeader);
-        Claims claims = JwtUtils.decodeJWT(token);
+        
+        if (token == null) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().println("Token absent");
+            return;
+        }
 
+        Claims claims = JwtUtils.decodeJWT(token);
         if (claims == null) {
-            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalide ou absent");
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().println("Token invalide");
             return;
         }
 

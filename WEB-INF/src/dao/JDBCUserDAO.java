@@ -3,7 +3,6 @@ package dao;
 import db.Database;
 import dto.LeaderBoardUser;
 import dto.User;
-import dto.WasteType;
 import utils.Config;
 
 import java.sql.*;
@@ -16,7 +15,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User update(User user) {
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, role = ? WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Users SET login = ?, role = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getRole());
             ps.setInt(3, user.getId());
