@@ -13,7 +13,7 @@
 
 * **Réponse attendue :**
     * **Code de succès :** `200 OK`
-    * **Données renvoyées :** Un tableau de [`CollectionPoint`](/TODO.md)
+    * **Données renvoyées :** Un tableau de [`CollectionPoint`](./types.md#collectionpoint)
 
 * **Codes d'erreur possibles :**
   * `204 No Content` : La liste est vide
@@ -21,7 +21,7 @@
 ---
 
 ## GET `/points/{id}`
-**Description :** Retourne un point de collecte par son ID
+**Description :** Retourne un point de collecte par son ID incluant la liste imbriquée des [`WasteType`](/docs/types.md#wastetype) acceptés.
 
 **Authentification :** Public
 
@@ -31,7 +31,7 @@
 
 * **Réponse attendue :**
   * **Code de succès :** `200 OK`
-  * **Données renvoyées :** Un [`CollectionPoint`](/TODO.md)
+  * **Données renvoyées :** Un [`CollectionPointWithWasteTypes`](/docs/types.md#collectionpointwithwastetypes)
 
 * **Codes d'erreur possibles :**
   * `404 Not Found` : L'id est non inexistant
@@ -46,7 +46,7 @@
 * **Requête :**
     * **Types acceptés (Headers) :** `[ex : application/json]`
     * **Corps attendu (Body) :**
-      Un objet [`CollectionPoint`](/TODO.md)
+      Un objet [`CollectionPoint`](/docs/types.md#collectionpoint)
       * Exemple :
         ```json
         {

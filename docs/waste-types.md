@@ -13,7 +13,7 @@
 
 * **Réponse attendue :**
     * **Code de succès :** `200 OK`
-    * **Données renvoyées :** Un tableau de [`WasteType`](/TODO.md)
+    * **Données renvoyées :** Un tableau de [`WasteType`](/docs/types.md#wastetype)
 
 * **Codes d'erreur possibles :**
     * `204 No Content` : La liste est vide
@@ -31,7 +31,7 @@
 
 * **Réponse attendue :**
   * **Code de succès :** `200 OK`
-  * **Données renvoyées :** Un [`WasteType`](/TODO.md)
+  * **Données renvoyées :** Un [`WasteType`](/docs/types.md#wastetype)
 
 * **Codes d'erreur possibles :**
   * `404 Not Found` : L'id est non inexistant
@@ -45,7 +45,7 @@
 **Authentification :** Administrateur seulement
 
 * **Requête :**
-    * **Corps attendu (Body) :** Un objet [`WasteType`](/TODO.md)
+    * **Corps attendu (Body) :** Un objet [`WasteType`](/docs/types.md#wastetype)
 
 * **Réponse attendue :**
     * **Code de succès :** `201 Created`

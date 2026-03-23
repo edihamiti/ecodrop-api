@@ -19,3 +19,7 @@ Afin de tester les fonctionnalitées réservées aux administrateurs, il est né
 [Types de déchets](docs/waste-types.md)
 
 [Points de Collecte](docs/collection-points.md)
+
+## Base de données
+
+# TODO: Ajouter le schéma de la base de données, et les requêtes SQL complexes
