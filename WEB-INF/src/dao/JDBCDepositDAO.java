@@ -101,6 +101,11 @@ public class JDBCDepositDAO implements DepositDAO {
         int pointId = deposit.getPoint().getId();
         double weight = deposit.getWeight();
 
+        // Vérifier que le dépôt ne dépasse pas la capacité du point de collecte
+        if (!canAcceptDeposit(pointId, weight)) {
+            throw new IllegalStateException("Le poids total des dépôts dépasse la capacité maximale du point de collecte");
+        }
+
         try (Connection con = bdd.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO deposit(userid, pointid, wasteTypeId, poids, datedepot) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, deposit.getUserId());
