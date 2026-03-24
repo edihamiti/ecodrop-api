@@ -68,7 +68,8 @@ VALUES ('30 rue de la Brasserie Ronchin', 150),
 CREATE TABLE Accepts
 (
     pointid     INT REFERENCES CollectionPoint (id),
-    wastetypeid INT REFERENCES WasteType (id)
+    wastetypeid INT REFERENCES WasteType (id),
+    CONSTRAINT pk_accepts PRIMARY KEY (pointid, wastetypeid)
 );
 
 INSERT INTO Accepts(pointid, wastetypeid)
@@ -194,7 +195,8 @@ CREATE TABLE Deposit
     wasteTypeId INT REFERENCES WasteType (id),
     poids       INT,
     dateDepot   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    collected   BOOLEAN DEFAULT FALSE
+    collected   BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_deposit_accepts FOREIGN KEY (pointid, wastetypeid) REFERENCES Accepts (pointid, wastetypeid)
 );
 
 INSERT INTO Deposit(userid, pointid, wasteTypeId, poids)

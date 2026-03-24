@@ -93,7 +93,7 @@ public class DepositsControlleur extends PatchServlet {
             }
             SerializationUtils.sendResponse(resp, req, saved, HttpServletResponse.SC_CREATED);
         } catch (IllegalStateException e) {
-            // 403 Forbidden si le point de collecte est saturé
+            // 403 Forbidden si le point de collecte est saturé ou si le type de déchets n'est pas accepté
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         }
     }
