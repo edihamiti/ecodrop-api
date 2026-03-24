@@ -6,30 +6,23 @@
 
     <display-name>Ecodrop API</display-name>
 
-    <!-- 
-         L'ordre des filtres dans web.xml définit l'ordre d'exécution de la chaîne.
-         On place le RateLimitFilter EN PREMIER pour rejeter les abus avant tout traitement coûteux.
-    -->
-
     <filter>
         <filter-name>RateLimitFilter</filter-name>
-        <filter-class>security.RateLimitFilter</filter-class>
+        <filter-class>org.apache.catalina.filters.RateLimitFilter</filter-class>
+
+        <init-param>
+            <param-name>bucketRequests</param-name>
+            <param-value>100</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>bucketDuration</param-name>
+            <param-value>60</param-value>
+        </init-param>
     </filter>
 
-    <filter>
-        <filter-name>SecurityFilter</filter-name>
-        <filter-class>security.SecurityFilter</filter-class>
-    </filter>
-
-    <!-- Mappings (L'ordre des mappings définit l'ordre d'application) -->
-    
     <filter-mapping>
         <filter-name>RateLimitFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>SecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

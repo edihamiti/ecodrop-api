@@ -54,6 +54,24 @@ Le `SecurityFilter` de l'API applique les règles suivantes :
 | `DELETE` | *(tous)* | **ADMIN** |
 | `POST`, `PUT`, `PATCH` | *(autres)* | **ADMIN** |
 
+## Limitation de débit (Rate Limiting)
+
+Pour garantir la stabilité du service, une limitation de débit est appliquée sur l'ensemble des endpoints de l'API :
+
+- **Limite** : 100 requêtes par minute et par adresse IP.
+- **Dépassement** : En cas de dépassement de cette limite, l'API renvoie un code d'erreur `429 Too Many Requests`.
+
+## Pagination
+
+Les endpoints listant plusieurs ressources (points de collecte, dépôts, utilisateurs, etc.) supportent la pagination via deux paramètres de requête optionnels :
+
+- **`limit`** : Nombre maximum de résultats à retourner.
+  - **Valeur par défaut** : 20
+- **`offset`** : Nombre de résultats à sauter avant de commencer à retourner les données.
+  - **Valeur par défaut** : 0
+
+Exemple d'utilisation : `/ecodrop/users/leaderboard?limit=5&offset=10`
+
 ## Endpoints disponibles
 
 *   [Authentification (Token)](docs/token.md)
