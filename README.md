@@ -72,6 +72,13 @@ Les endpoints listant plusieurs ressources (points de collecte, dépôts, utilis
 
 Exemple d'utilisation : `/ecodrop/users/leaderboard?limit=5&offset=10`
 
+## Formats de données
+
+L'API supporte les formats **JSON** (par défaut) et **XML** pour les échanges de données.
+
+- **Pour l'envoi de données** (`POST`, `PUT`, `PATCH`) : Spécifiez le format dans le header `Content-Type` (ex: `application/json` ou `application/xml`).
+- **Pour la réception de données** (`GET`) : Spécifiez le format souhaité dans le header `Accept` (ex: `application/json` ou `application/xml`).
+
 ## Endpoints disponibles
 
 *   [Authentification (Token)](docs/token.md)
