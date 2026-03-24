@@ -1,7 +1,8 @@
 info:
-  name: POST 403 - point saturé
+  name: POST 403 - mauvais type déchet
   type: http
   seq: 5
+
 http:
   method: POST
   url: http://localhost:8080/ecodrop/deposits/
@@ -19,14 +20,17 @@ http:
         "userId": 1,
         "point": { "id": 8 },
         "wasteType": { "id": 1 },
-        "weight": 999999
+        "weight": 1,
+        "dateDepot": "2025-12-03"
       }
   auth: inherit
+
 runtime:
   assertions:
     - expression: res.status
       operator: eq
       value: "403"
+
 settings:
   encodeUrl: true
   timeout: 0
