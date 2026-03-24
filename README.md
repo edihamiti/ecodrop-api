@@ -12,7 +12,47 @@ Afin de tester les fonctionnalitées réservées aux administrateurs, il est né
 
 ## Authentification
 
-# JONAS STP REMPLIS CETTE PARTIE
+Le projet utilise un système d'authentification déléguée basé sur le protocole **OAuth2**. Nous ne stockons pas de mots de passe ; l'identité des utilisateurs est vérifiée par des fournisseurs de confiance (GitLab, Discord, Google, GitHub).
+
+### Fonctionnement du flux
+
+1.  **Sélection du fournisseur** : L'utilisateur choisit un service (ex: GitLab) sur la page d'accueil.
+2.  **Autorisation externe** : L'utilisateur est redirigé vers le site du fournisseur pour autoriser Ecodrop à accéder à ses informations de profil (email, pseudo).
+3.  **Échange du code** : Le fournisseur redirige l'utilisateur vers notre API (`/auth/token`) avec un *Authorization Code*.
+4.  **Récupération de l'identité** : L'API échange ce code contre un *Access Token*, puis récupère les informations de l'utilisateur.
+5.  **Persistance et Rôle** : L'API vérifie si l'utilisateur existe en base de données. S'il s'agit d'une première connexion, un compte est créé. Le rôle (USER ou ADMIN) est récupéré.
+6.  **Génération du JWT** : L'API génère un jeton **JWT (JSON Web Token)** signé, contenant l'ID, l'email et le rôle de l'utilisateur. Ce jeton doit être envoyé par le client dans le header `Authorization: Bearer <token>` pour chaque requête protégée.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as API Ecodrop
+    participant DB as Base de données
+    participant Provider as OAuth Provider
+
+    Client->>Provider: 1. Demande d'autorisation (Login)
+    Provider-->>Client: 2. Redirection vers callback avec Code
+    Client->>API: 3. Appel /auth/token?code=...
+    API->>Provider: 4. Échange Code contre Access Token
+    Provider-->>API: 5. Retourne Access Token
+    API->>Provider: 6. Demande infos utilisateur (email, pseudo)
+    Provider-->>API: 7. Retourne infos utilisateur
+    API->>DB: 8. Vérifie/Crée l'utilisateur & récupère son rôle
+    DB-->>API: 9. Utilisateur (id, role)
+    API-->>Client: 10. Retourne JWT interne signé
+```
+
+### Autorisations et Rôles
+
+Le `SecurityFilter` de l'API applique les règles suivantes :
+
+| Méthode | Endpoint | Accès |
+| :--- | :--- | :--- |
+| `GET` | *(tous sauf exception)* | **Public** |
+| `GET` | `/points/overloaded` | **ADMIN** |
+| `POST` | `/deposits` | **USER** / **ADMIN** |
+| `DELETE` | *(tous)* | **ADMIN** |
+| `POST`, `PUT`, `PATCH` | *(autres)* | **ADMIN** |
 
 ## Endpoints disponibles
 
@@ -22,50 +62,49 @@ Afin de tester les fonctionnalitées réservées aux administrateurs, il est né
 
 ## Base de données
 
-# TODO: Ajouter le schéma de la base de données, et les requêtes SQL complexes
+Le schéma suivant représente l'organisation des données dans l'application.
 
 ```mermaid
 classDiagram
 direction BT
 
-class users {
+class Users {
    int id PK
    string login
-   string password
    string role
 }
 
-class wastetype {
+class WasteType {
    int id PK
    string nom
-   int pointsperkilo
+   int pointsPerKilo
 }
 
-class collectionpoint {
+class CollectionPoint {
    int id PK
    string adresse
-   int capacitemax
+   int capaciteMax
 }
 
-class accepts {
+class Accepts {
    int pointid FK
    int wastetypeid FK
 }
 
-class deposit {
+class Deposit {
    int id PK
    int userid FK
    int pointid FK
    int wastetypeid FK
    int poids
-   datetime datedepot
+   datetime dateDepot
    boolean collected
 }
 
-collectionpoint "1" --> "0..*" deposit : pointid
-users "1" --> "0..*" deposit : userid
-wastetype "1" --> "0..*" deposit : wastetypeid
+CollectionPoint "1" --> "0..*" Deposit : pointid
+Users "1" --> "0..*" Deposit : userid
+WasteType "1" --> "0..*" Deposit : wastetypeid
 
-collectionpoint "1" --> "0..*" accepts : pointid
-wastetype "1" --> "0..*" accepts : wastetypeid
+CollectionPoint "1" --> "0..*" Accepts : pointid
+WasteType "1" --> "0..*" Accepts : wastetypeid
 ```
