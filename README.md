@@ -56,9 +56,11 @@ Le `SecurityFilter` de l'API applique les règles suivantes :
 
 ## Endpoints disponibles
 
-[Types de déchets](docs/waste-types.md)
-
-[Points de Collecte](docs/collection-points.md)
+*   [Authentification (Token)](docs/token.md)
+*   [Utilisateurs](docs/users.md)
+*   [Types de déchets](docs/waste-types.md)
+*   [Points de Collecte](docs/collection-points.md)
+*   [Dépôts](docs/deposits.md)
 
 ## Base de données
 
