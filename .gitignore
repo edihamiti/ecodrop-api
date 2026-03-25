@@ -32,3 +32,7 @@ bin/
 /WEB-INF/classes/
 
 WEB-INF/res/config.prop
+
+# Generated HTML files in the docs folder
+/docs/**/*.html
+/docs/**/*.css
