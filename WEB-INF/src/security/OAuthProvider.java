@@ -103,7 +103,7 @@ public enum OAuthProvider {
         int port = request.getServerPort();
         String domain = request.getScheme() + "://" + request.getServerName()
                 + ((port == 80 || port == 443) ? "" : ":" + port);
-        return URLEncoder.encode((domain.startsWith("https")? domain : domain + "/ecodrop") + Config.get("redirect_uri"), StandardCharsets.UTF_8) + "?from=" + providerName;
+        return URLEncoder.encode((request.getScheme().equals("https")? domain : domain + "/ecodrop") + Config.get("redirect_uri"), StandardCharsets.UTF_8) + "?from=" + providerName;
     }
 
     /**
