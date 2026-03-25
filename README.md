@@ -2,13 +2,20 @@
 
 Ce document fournit la documentation de l'API REST pour le projet Ecodrop.
 
-## Liste des administrateurs :
+## Tester l'API
 
-Afin de tester les fonctionnalitées réservées aux administrateurs, il est nécessaire d'utiliser la connection avec Gitlab en utilisant un de ces identifiants :
+L'API Ecodrop est accessible via deux domaines différents pointant vers le même serveur :
 
- - philippe.mathieu@univ-lille.fr
- - jonas.facon.etu@univ-lille.fr
- - edi.hamiti.etu@univ-lille.fr
+- [https://ecodrop.edihamiti.fr](https://ecodrop.edihamiti.fr)
+- [https://ecodrop.jonas-facon.dev](https://ecodrop.jonas-facon.dev)
+
+### Liste des administrateurs
+
+Afin de tester les fonctionnalités réservées aux administrateurs, il est nécessaire de se connecter via **GitLab** en utilisant l'une des adresses e-mail suivantes :
+
+- `philippe.mathieu@univ-lille.fr`
+- `jonas.facon.etu@univ-lille.fr`
+- `edi.hamiti.etu@univ-lille.fr`
 
 ## Authentification
 
