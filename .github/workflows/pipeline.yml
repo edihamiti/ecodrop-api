@@ -6,38 +6,21 @@ on:
       - main
 
 jobs:
-  build-doc:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install Pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
-
-      - name: Run generation script
-        run: |
-          chmod +x generate_doc.sh
-          ./generate_doc.sh
-
-      - name: Commit and Push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "docs: auto-generate html documentation from markdown"
-          file_pattern: 'doc/*.html doc/*.css'
-          branch: main
-
   deploy:
-    needs: build-doc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # 1. On installe Pandoc et on génère la doc à la volée
+      - name: Build HTML Documentation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          chmod +x generate_doc.sh
+          ./generate_doc.sh
+
+      # 2. On envoie TOUT (le code source ET le nouveau dossier /doc généré) sur le serveur
       - name: Secure Copy Code to Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -47,6 +30,7 @@ jobs:
           source: "."
           target: "~/jpro-deployment/ecodrop-api"
 
+      # 3. On demande à Docker de recompiler l'application
       - name: Rebuild Infrastructure
         uses: appleboy/ssh-action@v0.1.10
         with:
