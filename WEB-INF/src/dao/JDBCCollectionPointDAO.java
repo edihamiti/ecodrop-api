@@ -24,6 +24,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
                 return new CollectionPoint(rs.getInt(1), rs.getString(2), rs.getInt(3));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;
@@ -46,6 +47,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
                 collectionPoints.add(new CollectionPoint(rs.getInt(1), rs.getString(2), rs.getInt(3)));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return collectionPoints;
@@ -66,6 +68,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
             ps.setInt(3, collectionPoint.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return collectionPoint;
@@ -88,6 +91,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
                 wasteTypes.add(new WasteType(rs.getInt(1), rs.getString(2), rs.getInt(3)));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return new CollectionPointWithWasteTypes(cp.getId(), cp.getAdresse(), cp.getCapaciteMax(), wasteTypes);
@@ -112,6 +116,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
                 return new CollectionPointStatus(rs.getInt(1), rs.getString(2), fillRate, full);
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;
@@ -136,6 +141,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
                 result.add(new CollectionPointStatus(rs.getInt(1), rs.getString(2), fillRate, full));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return result;
@@ -149,6 +155,7 @@ public class JDBCCollectionPointDAO implements CollectionPointDAO{
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return false;
         }
     }
