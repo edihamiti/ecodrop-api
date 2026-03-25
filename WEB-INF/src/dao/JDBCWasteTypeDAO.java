@@ -21,6 +21,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
                 return new WasteType(rs.getInt(1), rs.getString(2), rs.getInt(3));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;
@@ -38,6 +39,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
                 wasteTypes.add(new WasteType(rs.getInt(1), rs.getString(2), rs.getInt(3)));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return wasteTypes;
@@ -68,6 +70,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
             }
             return null;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -87,6 +90,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
             }
             return wasteType;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -99,6 +103,7 @@ public class JDBCWasteTypeDAO implements WasteTypeDAO {
             int affected = ps.executeUpdate();
             return affected > 0;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return false;
         }
     }
