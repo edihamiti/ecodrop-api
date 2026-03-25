@@ -56,11 +56,6 @@ public class JwtUtils {
         if (user == null){
             user = userDAO.save(login);
         }
-
-        if (user == null) {
-            throw new RuntimeException("Impossible de créer ou récupérer l'utilisateur dans la base de données");
-        }
-
         return Jwts.builder()
                 .subject(userInfo.email())
                 .claim("id", user.getId())
