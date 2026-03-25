@@ -42,6 +42,7 @@ public class JDBCDepositDAO implements DepositDAO {
                 deposits.add(mapRow(rs));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return deposits;
@@ -67,6 +68,7 @@ public class JDBCDepositDAO implements DepositDAO {
                 return total;
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return -1;
         }
         return 0;
@@ -122,6 +124,7 @@ public class JDBCDepositDAO implements DepositDAO {
             }
             return null;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             if (e.getMessage().contains("fk_deposit_accepts")) throw new IllegalStateException("Le point d'accès n'accepte pas ce type de déchets");
             return null;
         }
@@ -150,6 +153,7 @@ public class JDBCDepositDAO implements DepositDAO {
             }
             return null;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -169,6 +173,7 @@ public class JDBCDepositDAO implements DepositDAO {
                 return mapRow(rs);
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;

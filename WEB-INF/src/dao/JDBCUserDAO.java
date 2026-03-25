@@ -27,6 +27,7 @@ public class JDBCUserDAO implements UserDAO {
             }
             return null;
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -57,6 +58,8 @@ public class JDBCUserDAO implements UserDAO {
                 users.add(new LeaderBoardUser(rs.getString(1), rs.getInt(2)));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
+
             return null;
         }
         return users;
@@ -72,6 +75,7 @@ public class JDBCUserDAO implements UserDAO {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;
@@ -87,6 +91,8 @@ public class JDBCUserDAO implements UserDAO {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
+
             return null;
         }
         return null;
@@ -104,6 +110,7 @@ public class JDBCUserDAO implements UserDAO {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(2));
             }
         } catch (SQLException e) {
+            System.out.println("[" + getClass().getName() + "] Erreur SQL : " + e.getMessage());
             return null;
         }
         return null;
