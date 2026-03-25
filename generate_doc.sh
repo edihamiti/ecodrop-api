@@ -2,7 +2,7 @@
 
 # Configuration des dossiers
 DOCS_SRC="docs"
-OUTPUT_DIR="doc"
+OUTPUT_DIR="docs"
 CSS_URL="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css"
 
 # Créer le dossier de sortie s'il n'existe pas
@@ -47,12 +47,23 @@ else
     echo "Dossier $DOCS_SRC non trouvé."
 fi
 
-# 4. Correction des liens (Remplace .md par .html dans les fichiers générés)
+# 4. Correction des liens
 if ls "$OUTPUT_DIR"/*.html >/dev/null 2>&1; then
-    sed -i 's/href="docs\/\([^"]*\)\.md"/href="\1.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
-    sed -i 's/href="\([^"]*\)\.md"/href="\1.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
-    sed -i 's/href="README\.html"/href="index.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
-    sed -i 's/href="\.\.\/README\.html"/href="index.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    # 1. Remplace .md par .html pour les liens simples
+    sed -i.bak 's/href="\([^"]*\)\.md"/href="\1.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+
+    # 2. Remplace .md par .html pour les liens contenant une ancre (ex: #wastetype)
+    sed -i.bak 's/href="\([^"]*\)\.md#\([^"]*\)"/href="\1.html#\2"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+
+    # 3. Supprime les préfixes /docs/ et docs/ car tous les HTML sont dans le même dossier
+    sed -i.bak 's/href="\/docs\//href="/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    sed -i.bak 's/href="docs\//href="/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+
+    # 4. Redirige les liens README vers la nouvelle page d'accueil index.html
+    sed -i.bak 's/href="\([^"]*\)README\.html/href="\1index.html/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+
+    # 5. Nettoyage silencieux des fichiers de sauvegarde créés par sed
+    rm -f "$OUTPUT_DIR"/*.bak
 fi
 
-echo "Terminé ! La doc est disponible dans le dossier /doc"
+echo "Terminé ! La doc est disponible dans le dossier /"$OUTPUT_DIR". Ouvrez index.html pour commencer."
