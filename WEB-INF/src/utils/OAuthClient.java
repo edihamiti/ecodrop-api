@@ -113,26 +113,22 @@ public class OAuthClient {
      * - Google  : email, name
      * - Discord : email, username
      * - GitLab  : email, username
+     * - GitHub  : email, login (username)
      */
     private static UserInfo extractUserInfo(JsonNode json, OAuthProvider provider) {
-        return switch (provider) {
-            case GOOGLE -> new UserInfo(
-                    getField(json, "email"),
-                    getField(json, "name")
-            );
-            case DISCORD -> new UserInfo(
-                    getField(json, "email"),
-                    getField(json, "username")
-            );
-            case GITLAB -> new UserInfo(
-                    getField(json, "email"),
-                    getField(json, "username")
-            );
-            case GITHUB -> new UserInfo(
-                    getField(json, "email"),
-                    getField(json, "username")
-            );
+        String email = getField(json, "email");
+        String pseudo = switch (provider) {
+            case GOOGLE -> getField(json, "name");
+            case DISCORD, GITLAB -> getField(json, "username");
+            case GITHUB -> getField(json, "login");
         };
+
+        // Si l'email est absent (ex: GitHub avec email privé), on utilise le pseudo comme identifiant.
+        if (email == null) {
+            email = pseudo;
+        }
+
+        return new UserInfo(email, pseudo);
     }
 
     /**

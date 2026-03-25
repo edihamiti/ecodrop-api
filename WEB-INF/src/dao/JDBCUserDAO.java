@@ -23,7 +23,7 @@ public class JDBCUserDAO implements UserDAO {
             if (affected == 0) return null;
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
+                return new User(rs.getInt(1), user.getLogin(), user.getRole());
             }
             return null;
         } catch (SQLException e) {
@@ -101,7 +101,7 @@ public class JDBCUserDAO implements UserDAO {
             if (affected == 0) return null;
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(2));
+                return new User(rs.getInt(1), login, "USER");
             }
         } catch (SQLException e) {
             return null;
