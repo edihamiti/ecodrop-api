@@ -1,4 +1,24 @@
-# --- STAGE 1: The Ninja Builder ---
+# ==========================================
+# ÉTAPE 1 : Le Bâtisseur de Documentation
+# ==========================================
+FROM ubuntu:latest AS doc-builder
+
+# 1. On installe Pandoc et Curl (pour télécharger le CSS)
+RUN apt-get update && apt-get install -y pandoc curl
+
+WORKDIR /build
+
+# 2. On copie uniquement les fichiers nécessaires à la doc
+COPY docs/ ./docs/
+COPY README.md .
+COPY generate_doc.sh .
+
+# 3. On génère les HTML (le script va créer le CSS et les HTML dans le dossier docs/)
+RUN chmod +x generate_doc.sh && ./generate_doc.sh
+
+# =======================
+# ÉTAPE 2 : La Production
+# =======================
 FROM tomcat:10.1-jdk21 AS builder
 
 WORKDIR /build
@@ -36,6 +56,9 @@ RUN mkdir -p /usr/local/tomcat/webapps/ROOT
 
 # Copy the fully compiled project from the builder stage
 COPY --from=builder /build/ /usr/local/tomcat/webapps/ROOT/
+
+# On prends les fichiers de documentation générés dans la première étape et on les place dans un dossier docs/ à la racine de l'application web
+COPY --from=doc-builder /build/docs/ /usr/local/tomcat/webapps/ROOT/docs/
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
