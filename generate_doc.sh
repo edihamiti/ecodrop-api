@@ -13,7 +13,25 @@ curl -s "$CSS_URL" > "$OUTPUT_DIR/markdown.css"
 
 # Petit enrobage HTML pour que le CSS GitHub s'applique correctement
 HEADER="<div class='markdown-body' style='padding: 45px; max-width: 980px; margin: 0 auto;'>"
-FOOTER="</div>"
+FOOTER="</div>
+<script src='https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // On cherche les blocs <pre class='mermaid'> générés par pandoc
+        const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+        mermaidBlocks.forEach(block => {
+            const code = block.querySelector('code');
+            const content = code ? code.textContent : block.textContent;
+            
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = content;
+            
+            block.parentNode.replaceChild(div, block);
+        });
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    });
+</script>"
 
 echo "Génération de la documentation..."
 
