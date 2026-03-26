@@ -93,6 +93,7 @@ L'API supporte les formats **JSON** (par défaut) et **XML** pour les échanges 
 *   [Types de déchets](docs/waste-types.md)
 *   [Points de Collecte](docs/collection-points.md)
 *   [Dépôts](docs/deposits.md)
+*   [Base de données](docs/db.md)
 
 ## Base de données
 
