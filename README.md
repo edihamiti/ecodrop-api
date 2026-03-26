@@ -6,8 +6,8 @@ Ce document fournit la documentation de l'API REST pour le projet Ecodrop.
 
 L'API Ecodrop est accessible via deux domaines différents pointant vers le même serveur :
 
-- [https://ecodrop.edihamiti.fr](https://ecodrop.edihamiti.fr)
-- [https://ecodrop.jonas-facon.dev](https://ecodrop.jonas-facon.dev)
+- [https://ecodrop.edihamiti.fr/docs](https://ecodrop.edihamiti.fr/docs)
+- [https://ecodrop.jonas-facon.dev/docs](https://ecodrop.jonas-facon.dev/docs)
 
 ### Liste des administrateurs
 
