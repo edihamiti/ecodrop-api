@@ -47,41 +47,58 @@ else
     echo "README.md non trouvé à la racine."
 fi
 
-# 3. Convertir tous les fichiers dans docs/ vers doc/
+# 3. Convertir tous les fichiers dans docs/ vers doc/ (récursivement)
 if [ -d "$DOCS_SRC" ]; then
-    for f in "$DOCS_SRC"/*.md; do
-        [ -e "$f" ] || continue
+    find "$DOCS_SRC" -name "*.md" | while read -r f; do
+        # Chemin relatif par rapport à DOCS_SRC (ex: mathieu/users.md)
+        rel_path="${f#$DOCS_SRC/}"
+        
+        # Dossier de destination
+        dest_dir="$OUTPUT_DIR/$(dirname "$rel_path")"
+        mkdir -p "$dest_dir"
+        
+        # Nom du fichier sans extension
         filename=$(basename "$f" .md)
-        echo "Traitement de $filename..."
+        # Chemin du fichier de sortie
+        out_file="$OUTPUT_DIR/${rel_path%.md}.html"
+        
+        echo "Traitement de $rel_path..."
+
+        # Calcul de la profondeur pour le chemin du CSS
+        depth=$(echo "$rel_path" | tr -cd '/' | wc -c)
+        css_path="markdown.css"
+        for ((i=0; i<depth; i++)); do
+            css_path="../$css_path"
+        done
 
         pandoc "$f" -s \
             --metadata title="EcoDrop - $filename" \
-            --css="markdown.css" \
+            --css="$css_path" \
             --include-before-body=<(echo "$HEADER") \
             --include-after-body=<(echo "$FOOTER") \
-            -o "$OUTPUT_DIR/$filename.html"
+            -o "$out_file"
     done
 else
     echo "Dossier $DOCS_SRC non trouvé."
 fi
 
 # 4. Correction des liens
-if ls "$OUTPUT_DIR"/*.html >/dev/null 2>&1; then
+if find "$OUTPUT_DIR" -name "*.html" | grep -q .; then
     # 1. Remplace .md par .html pour les liens simples
-    sed -i.bak 's/href="\([^"]*\)\.md"/href="\1.html"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    find "$OUTPUT_DIR" -name "*.html" -exec sed -i.bak 's/href="\([^"]*\)\.md"/href="\1.html"/g' {} +
 
     # 2. Remplace .md par .html pour les liens contenant une ancre (ex: #wastetype)
-    sed -i.bak 's/href="\([^"]*\)\.md#\([^"]*\)"/href="\1.html#\2"/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    find "$OUTPUT_DIR" -name "*.html" -exec sed -i.bak 's/href="\([^"]*\)\.md#\([^"]*\)"/href="\1.html#\2"/g' {} +
 
-    # 3. Supprime les préfixes /docs/ et docs/ car tous les HTML sont dans le même dossier
-    sed -i.bak 's/href="\/docs\//href="/g' "$OUTPUT_DIR"/*.html 2>/dev/null
-    sed -i.bak 's/href="docs\//href="/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    # 3. Supprime les préfixes /docs/ et docs/ car on veut des liens relatifs
+    find "$OUTPUT_DIR" -name "*.html" -exec sed -i.bak 's/href="\/docs\//href="/g' {} +
+    find "$OUTPUT_DIR" -name "*.html" -exec sed -i.bak 's/href="docs\//href="/g' {} +
 
     # 4. Redirige les liens README vers la nouvelle page d'accueil index.html
-    sed -i.bak 's/href="\([^"]*\)README\.html/href="\1index.html/g' "$OUTPUT_DIR"/*.html 2>/dev/null
+    find "$OUTPUT_DIR" -name "*.html" -exec sed -i.bak 's/href="\([^"]*\)README\.html/href="\1index.html/g' {} +
 
     # 5. Nettoyage silencieux des fichiers de sauvegarde créés par sed
-    rm -f "$OUTPUT_DIR"/*.bak
+    find "$OUTPUT_DIR" -name "*.bak" -delete
 fi
 
 echo "Terminé ! La doc est disponible dans le dossier /"$OUTPUT_DIR". Ouvrez index.html pour commencer."
