@@ -94,6 +94,14 @@ L'API supporte les formats **JSON** (par défaut) et **XML** pour les échanges 
 *   [Points de Collecte](docs/collection-points.md)
 *   [Dépôts](docs/deposits.md)
 
+## Documentation alternative (Format Philippe Mathieu)
+
+*   [Authentification (Token)](docs/mathieu/token.md)
+*   [Utilisateurs](docs/mathieu/users.md)
+*   [Types de déchets](docs/mathieu/waste-types.md)
+*   [Points de Collecte](docs/mathieu/collection-points.md)
+*   [Dépôts](docs/mathieu/deposits.md)
+
 ## Base de données
 
 Le schéma suivant représente l'organisation des données dans l'application.
