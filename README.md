@@ -151,3 +151,37 @@ WasteType "1" --> "0..*" Deposit : wastetypeid
 CollectionPoint "1" --> "0..*" Accepts : pointid
 WasteType "1" --> "0..*" Accepts : wastetypeid
 ```
+
+## Requêtes Complexes
+
+### Classement des utilisateurs par points
+Récupère les utilisateurs et leur nombre total de points par ordre décroissant.
+```sql
+SELECT Users.login, SUM(Deposit.poids * WasteType.pointsPerKilo) AS totalPoints
+FROM Users
+JOIN Deposit ON Users.id = Deposit.userId
+JOIN WasteType ON Deposit.wasteTypeId = WasteType.id
+GROUP BY Users.id, Users.login
+ORDER BY totalPoints DESC
+LIMIT ? OFFSET ?
+```
+
+### Capacité actuelle d'un point de collecte
+Récupère la capacité maximale et le poids total actuel des dépôts non collectés pour un point donné.
+```sql
+SELECT cp.capaciteMax, COALESCE(SUM(d.poids), 0) AS totalWeight
+FROM CollectionPoint cp 
+LEFT JOIN Deposit d ON d.pointid = cp.id AND d.collected IS FALSE
+WHERE cp.id = ? 
+GROUP BY cp.id, cp.capaciteMax
+```
+
+### Points de collecte surchargés (> 80%)
+Identifie les points de collecte dont le taux de remplissage dépasse 80% de leur capacité maximale.
+```sql
+SELECT cp.id, cp.adresse, cp.capaciteMax, COALESCE(SUM(d.poids), 0) AS totalPoids 
+FROM CollectionPoint cp 
+LEFT JOIN Deposit d ON d.pointid = cp.id AND d.collected IS FALSE
+GROUP BY cp.id, cp.adresse, cp.capaciteMax 
+HAVING cp.capaciteMax > 0 AND (COALESCE(SUM(d.poids), 0) * 100.0 / cp.capaciteMax) > 80
+```
