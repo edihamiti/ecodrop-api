@@ -5,7 +5,7 @@ info:
 
 http:
   method: DELETE
-  url: http://localhost:8080/ecodrop/waste-types/13
+  url: http://localhost:8080/ecodrop/waste-types/12
   headers:
     - name: Authorization
       value: Bearer {{adminToken}}
