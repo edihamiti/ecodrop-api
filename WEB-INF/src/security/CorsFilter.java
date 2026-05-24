@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class CorsFilter implements Filter {
 
     private static final Pattern ALLOWED_ORIGIN_PATTERN = Pattern.compile(
-        "^https?://([a-z0-9-]+\\.)*edihamiti\\.fr$",
+        "^https?://(([a-z0-9-]+\\.)*edihamiti\\.fr|localhost(:[0-9]+)?)$",
         Pattern.CASE_INSENSITIVE
     );
 
