@@ -29,7 +29,7 @@ public class JDBCDepositDAO implements DepositDAO {
     public List<Deposit> findAll(int limit, int offset) {
         List<Deposit> deposits = new ArrayList<>();
         try (Connection con = bdd.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids, d.datedepot " +
+            PreparedStatement ps = con.prepareStatement("SELECT d.id, d.userid, cp.id, cp.adresse, cp.capaciteMax, wt.id, wt.nom, wt.pointsPerKilo, d.poids, d.datedepot, d.collected " +
                                                             "FROM Deposit d " +
                                                             "JOIN CollectionPoint cp ON d.pointid = cp.id " +
                                                             "JOIN WasteType wt ON d.wasteTypeId = wt.id " +
