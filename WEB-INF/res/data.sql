@@ -44,26 +44,26 @@ CREATE TABLE CollectionPoint
 );
 
 INSERT INTO CollectionPoint(adresse, capaciteMax)
-VALUES ('30 rue de la Brasserie Ronchin', 150),
+VALUES ('45 avenue Pasteur Lille', 150),
        ('29 rue boileau Armentières', 12),
-       ('28 rue de la Brasserie Ronchin', 10),
-       ('27 rue de la Brasserie Ronchin', 8),
-       ('26 rue de la Brasserie Ronchin', 6),
-       ('25 rue de la Brasserie Ronchin', 4),
-       ('24 rue de la Brasserie Ronchin', 2),
-       ('23 rue de la Brasserie Ronchin', 1),
-       ('22 rue de la Brasserie Ronchin', 0),
-       ('21 rue de la Brasserie Ronchin', 0),
-       ('14 rue le nôtre Wattignies', 15),
-       ('13 rue le nôtre Wattignies', 12),
-       ('12 rue le nôtre Wattignies', 10),
-       ('11 rue le nôtre Wattignies', 8),
-       ('10 rue le nôtre Wattignies', 6),
-       ('9 rue le nôtre Wattignies', 4),
-       ('8 rue le nôtre Wattignies', 2),
-       ('7 rue le nôtre Wattignies', 1),
-       ('6 rue le nôtre Wattignies', 0),
-       ('5 rue le nôtre Wattignies', 0);
+       ('12 rue André Gide Tourcoing', 10),
+       ('8 boulevard Victor Hugo Mouvaux', 8),
+       ('52 rue Jean Jaurès Lambersart', 6),
+       ('33 avenue de la République Marquette', 4),
+       ('7 rue Gambetta Wasquehal', 2),
+       ('91 rue de Metz Villeneuve d''Ascq', 1),
+       ('14 place Saint Maclou Pont-à-Marcq', 0),
+       ('60 rue de la Paix Emmerin', 0),
+       ('23 rue de Turenne Roubaix', 15),
+       ('18 avenue Gabriel Péri Croix', 12),
+       ('76 rue Nationale Wattrelos', 10),
+       ('42 rue du Docteur Calmette Dunkerque', 8),
+       ('11 boulevard de la Liberté Trélon', 6),
+       ('88 rue Michelet Cambrai', 4),
+       ('55 rue du Maréchal Foch Arras', 2),
+       ('3 avenue Jean Baptiste Lebas Valenciennes', 1),
+       ('29 rue de la Paix Douai', 0),
+       ('67 rue Voltaire Maubeuge', 0);
 
 CREATE TABLE Accepts
 (
